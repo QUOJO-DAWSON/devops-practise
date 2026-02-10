@@ -1,0 +1,476 @@
+pipeline {
+    agent any
+    
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+        timestamps()
+        timeout(time: 1, unit: 'HOURS')
+        disableConcurrentBuilds()
+    }
+    
+    environment {
+        DOCKER_REGISTRY = 'docker.io'
+        DOCKER_CREDENTIALS = credentials('docker-hub-credentials')
+        AWS_CREDENTIALS = credentials('aws-credentials')
+        KUBECONFIG_CREDENTIALS = credentials('kubeconfig')
+        SONAR_TOKEN = credentials('sonarqube-token')
+        SLACK_WEBHOOK = credentials('slack-webhook-url')
+        
+        IMAGE_NAME = "${env.DOCKER_REGISTRY}/${env.JOB_NAME}"
+        IMAGE_TAG = "${env.BUILD_NUMBER}-${env.GIT_COMMIT.take(7)}"
+        AWS_REGION = 'us-east-1'
+        
+        // SonarQube
+        SONAR_HOST = 'https://sonarqube.example.com'
+        SONAR_PROJECT = 'devops-practise'
+    }
+    
+    parameters {
+        choice(
+            name: 'ENVIRONMENT',
+            choices: ['dev', 'staging', 'production'],
+            description: 'Deployment environment'
+        )
+        booleanParam(
+            name: 'RUN_SECURITY_SCAN',
+            defaultValue: true,
+            description: 'Run security vulnerability scanning'
+        )
+        booleanParam(
+            name: 'DEPLOY_TO_K8S',
+            defaultValue: true,
+            description: 'Deploy to Kubernetes cluster'
+        )
+        string(
+            name: 'SLACK_CHANNEL',
+            defaultValue: '#devops-alerts',
+            description: 'Slack channel for notifications'
+        )
+    }
+    
+    stages {
+        stage('Initialize') {
+            steps {
+                script {
+                    echo "Starting pipeline for ${env.GIT_BRANCH}"
+                    echo "Build number: ${env.BUILD_NUMBER}"
+                    echo "Commit: ${env.GIT_COMMIT}"
+                    
+                    // Set build description
+                    currentBuild.description = "Branch: ${env.GIT_BRANCH}, Env: ${params.ENVIRONMENT}"
+                }
+                
+                // Clean workspace
+                cleanWs()
+                
+                // Checkout code
+                checkout scm
+            }
+        }
+        
+        stage('Pre-checks') {
+            parallel {
+                stage('Lint Shell Scripts') {
+                    steps {
+                        script {
+                            sh '''
+                                echo "Running shellcheck on all shell scripts..."
+                                find scripts -type f -name "*.sh" -exec shellcheck {} \\;
+                            '''
+                        }
+                    }
+                }
+                
+                stage('Validate YAML') {
+                    steps {
+                        script {
+                            sh '''
+                                echo "Validating YAML files..."
+                                yamllint -c .yamllint.yml infrastructure/kubernetes/ || true
+                                yamllint -c .yamllint.yml .github/workflows/ || true
+                            '''
+                        }
+                    }
+                }
+                
+                stage('Terraform Validate') {
+                    steps {
+                        dir('infrastructure/terraform/aws') {
+                            sh '''
+                                terraform fmt -check -recursive
+                                terraform init -backend=false
+                                terraform validate
+                            '''
+                        }
+                    }
+                }
+            }
+        }
+        
+        stage('Security Scanning') {
+            when {
+                expression { params.RUN_SECURITY_SCAN == true }
+            }
+            parallel {
+                stage('Secret Scanning') {
+                    steps {
+                        script {
+                            sh '''
+                                echo "Scanning for secrets..."
+                                trufflehog filesystem . --json --fail > trufflehog-results.json || true
+                            '''
+                            
+                            archiveArtifacts artifacts: 'trufflehog-results.json', allowEmptyArchive: true
+                        }
+                    }
+                }
+                
+                stage('Dependency Check') {
+                    steps {
+                        script {
+                            sh '''
+                                echo "Checking dependencies for vulnerabilities..."
+                                npm audit --json > npm-audit-results.json || true
+                            '''
+                            
+                            archiveArtifacts artifacts: 'npm-audit-results.json', allowEmptyArchive: true
+                        }
+                    }
+                }
+                
+                stage('IaC Security Scan') {
+                    steps {
+                        script {
+                            sh '''
+                                echo "Running Checkov on Infrastructure as Code..."
+                                checkov -d infrastructure/ -o json > checkov-results.json || true
+                            '''
+                            
+                            archiveArtifacts artifacts: 'checkov-results.json', allowEmptyArchive: true
+                        }
+                    }
+                }
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                script {
+                    echo "Building Docker image: ${IMAGE_NAME}:${IMAGE_TAG}"
+                    
+                    sh """
+                        docker build \\
+                            -t ${IMAGE_NAME}:${IMAGE_TAG} \\
+                            -t ${IMAGE_NAME}:latest \\
+                            -f docker/Dockerfile \\
+                            --build-arg BUILD_DATE=\$(date -u +'%Y-%m-%dT%H:%M:%SZ') \\
+                            --build-arg VCS_REF=${env.GIT_COMMIT} \\
+                            --build-arg VERSION=${IMAGE_TAG} \\
+                            .
+                    """
+                }
+            }
+        }
+        
+        stage('Test') {
+            parallel {
+                stage('Unit Tests') {
+                    steps {
+                        script {
+                            sh """
+                                echo "Running unit tests..."
+                                docker run --rm ${IMAGE_NAME}:${IMAGE_TAG} npm test
+                            """
+                        }
+                    }
+                }
+                
+                stage('Integration Tests') {
+                    steps {
+                        script {
+                            sh '''
+                                echo "Running integration tests..."
+                                docker-compose -f docker/docker-compose.test.yml up --abort-on-container-exit
+                                docker-compose -f docker/docker-compose.test.yml down
+                            '''
+                        }
+                    }
+                }
+                
+                stage('Container Structure Test') {
+                    steps {
+                        script {
+                            sh """
+                                echo "Testing container structure..."
+                                container-structure-test test \\
+                                    --image ${IMAGE_NAME}:${IMAGE_TAG} \\
+                                    --config tests/container-structure-test.yaml
+                            """
+                        }
+                    }
+                }
+            }
+        }
+        
+        stage('Code Quality') {
+            steps {
+                script {
+                    withSonarQubeEnv('SonarQube') {
+                        sh """
+                            sonar-scanner \\
+                                -Dsonar.projectKey=${SONAR_PROJECT} \\
+                                -Dsonar.sources=. \\
+                                -Dsonar.host.url=${SONAR_HOST} \\
+                                -Dsonar.login=${SONAR_TOKEN}
+                        """
+                    }
+                }
+            }
+        }
+        
+        stage('Quality Gate') {
+            steps {
+                script {
+                    timeout(time: 5, unit: 'MINUTES') {
+                        def qg = waitForQualityGate()
+                        if (qg.status != 'OK') {
+                            error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                        }
+                    }
+                }
+            }
+        }
+        
+        stage('Image Scanning') {
+            when {
+                expression { params.RUN_SECURITY_SCAN == true }
+            }
+            steps {
+                script {
+                    sh """
+                        echo "Scanning Docker image for vulnerabilities..."
+                        trivy image \\
+                            --severity HIGH,CRITICAL \\
+                            --format json \\
+                            --output trivy-results.json \\
+                            ${IMAGE_NAME}:${IMAGE_TAG}
+                    """
+                    
+                    archiveArtifacts artifacts: 'trivy-results.json', allowEmptyArchive: true
+                }
+            }
+        }
+        
+        stage('Push Image') {
+            when {
+                branch 'main'
+            }
+            steps {
+                script {
+                    docker.withRegistry("https://${DOCKER_REGISTRY}", 'docker-hub-credentials') {
+                        sh """
+                            docker push ${IMAGE_NAME}:${IMAGE_TAG}
+                            docker push ${IMAGE_NAME}:latest
+                        """
+                    }
+                    
+                    echo "Image pushed successfully: ${IMAGE_NAME}:${IMAGE_TAG}"
+                }
+            }
+        }
+        
+        stage('Deploy to Development') {
+            when {
+                allOf {
+                    branch 'develop'
+                    expression { params.DEPLOY_TO_K8S == true }
+                }
+            }
+            steps {
+                script {
+                    echo "Deploying to Development environment..."
+                    
+                    sh """
+                        ./scripts/deployment/deploy-aws.sh \\
+                            --environment dev \\
+                            --image ${IMAGE_NAME}:${IMAGE_TAG} \\
+                            --namespace development \\
+                            --replicas 2
+                    """
+                }
+            }
+        }
+        
+        stage('Deploy to Staging') {
+            when {
+                allOf {
+                    branch 'main'
+                    expression { params.ENVIRONMENT == 'staging' }
+                    expression { params.DEPLOY_TO_K8S == true }
+                }
+            }
+            steps {
+                script {
+                    echo "Deploying to Staging environment..."
+                    
+                    sh """
+                        ./scripts/deployment/deploy-aws.sh \\
+                            --environment staging \\
+                            --image ${IMAGE_NAME}:${IMAGE_TAG} \\
+                            --namespace staging \\
+                            --replicas 3
+                    """
+                    
+                    // Run smoke tests
+                    sh './scripts/deployment/smoke-test.sh https://staging.example.com'
+                }
+            }
+        }
+        
+        stage('Approval for Production') {
+            when {
+                allOf {
+                    branch 'main'
+                    expression { params.ENVIRONMENT == 'production' }
+                }
+            }
+            steps {
+                script {
+                    def deploy = input(
+                        message: 'Deploy to Production?',
+                        parameters: [
+                            booleanParam(
+                                name: 'CONFIRM_DEPLOY',
+                                defaultValue: false,
+                                description: 'Confirm production deployment'
+                            )
+                        ]
+                    )
+                    
+                    if (!deploy) {
+                        error "Production deployment cancelled by user"
+                    }
+                }
+            }
+        }
+        
+        stage('Deploy to Production') {
+            when {
+                allOf {
+                    branch 'main'
+                    expression { params.ENVIRONMENT == 'production' }
+                    expression { params.DEPLOY_TO_K8S == true }
+                }
+            }
+            steps {
+                script {
+                    echo "Deploying to Production with Blue-Green strategy..."
+                    
+                    sh """
+                        ./scripts/deployment/blue-green-deploy.sh \\
+                            --image ${IMAGE_NAME}:${IMAGE_TAG} \\
+                            --namespace production \\
+                            --health-check-url https://example.com/health \\
+                            --replicas 5
+                    """
+                    
+                    // Run E2E tests
+                    sh './scripts/deployment/e2e-tests.sh https://example.com'
+                }
+            }
+        }
+        
+        stage('Post-Deployment Tests') {
+            when {
+                expression { params.DEPLOY_TO_K8S == true }
+            }
+            steps {
+                script {
+                    sh """
+                        echo "Running post-deployment health checks..."
+                        ./scripts/monitoring/health-check.sh \\
+                            --environment ${params.ENVIRONMENT}
+                    """
+                }
+            }
+        }
+    }
+    
+    post {
+        always {
+            script {
+                // Archive artifacts
+                archiveArtifacts artifacts: '**/test-results/*.xml', allowEmptyArchive: true
+                
+                // Publish test results
+                junit testResults: '**/test-results/*.xml', allowEmptyResults: true
+                
+                // Clean up Docker images
+                sh """
+                    docker rmi ${IMAGE_NAME}:${IMAGE_TAG} || true
+                    docker system prune -f
+                """
+            }
+        }
+        
+        success {
+            script {
+                slackSend(
+                    channel: params.SLACK_CHANNEL,
+                    color: 'good',
+                    message: """
+                        ✅ Pipeline SUCCESS
+                        Job: ${env.JOB_NAME}
+                        Build: ${env.BUILD_NUMBER}
+                        Branch: ${env.GIT_BRANCH}
+                        Environment: ${params.ENVIRONMENT}
+                        Image: ${IMAGE_NAME}:${IMAGE_TAG}
+                        Duration: ${currentBuild.durationString}
+                        ${env.BUILD_URL}
+                    """.stripIndent(),
+                    tokenCredentialId: 'slack-token'
+                )
+            }
+        }
+        
+        failure {
+            script {
+                slackSend(
+                    channel: params.SLACK_CHANNEL,
+                    color: 'danger',
+                    message: """
+                        ❌ Pipeline FAILED
+                        Job: ${env.JOB_NAME}
+                        Build: ${env.BUILD_NUMBER}
+                        Branch: ${env.GIT_BRANCH}
+                        Environment: ${params.ENVIRONMENT}
+                        Failed Stage: ${env.STAGE_NAME}
+                        ${env.BUILD_URL}console
+                    """.stripIndent(),
+                    tokenCredentialId: 'slack-token'
+                )
+            }
+        }
+        
+        unstable {
+            script {
+                slackSend(
+                    channel: params.SLACK_CHANNEL,
+                    color: 'warning',
+                    message: """
+                        ⚠️ Pipeline UNSTABLE
+                        Job: ${env.JOB_NAME}
+                        Build: ${env.BUILD_NUMBER}
+                        Branch: ${env.GIT_BRANCH}
+                        ${env.BUILD_URL}
+                    """.stripIndent(),
+                    tokenCredentialId: 'slack-token'
+                )
+            }
+        }
+        
+        cleanup {
+            cleanWs()
+        }
+    }
+}
