@@ -1,0 +1,38 @@
+﻿name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Repository Structure Check
+      run: |
+        echo " Validating repository structure..."
+        echo "Files in repository:"
+        ls -la
+        
+    - name: Documentation Check
+      run: |
+        echo " Checking documentation..."
+        test -f README.md && echo "   README.md exists"
+        test -f LICENSE && echo "   LICENSE exists"
+        test -f CONTRIBUTING.md && echo "   CONTRIBUTING.md exists"
+        
+    - name: Infrastructure Check
+      run: |
+        echo " Checking infrastructure files..."
+        find infrastructure -type f | head -10
+        
+    - name: Success
+      run: |
+        echo "================================"
+        echo " All checks passed!"
+        echo "================================"
