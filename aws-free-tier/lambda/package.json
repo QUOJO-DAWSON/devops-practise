@@ -1,0 +1,17 @@
+{
+  "name": "visitor-counter-lambda",
+  "version": "1.0.0",
+  "description": "Visitor counter Lambda function with DynamoDB",
+  "main": "index.js",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.450.0",
+    "@aws-sdk/lib-dynamodb": "^3.450.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["lambda", "dynamodb", "visitor-counter"],
+  "author": "QUOJO-DAWSON",
+  "license": "MIT"
+}
