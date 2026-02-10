@@ -1,0 +1,27 @@
+﻿# Terraform
+*.tfstate
+*.tfstate.backup
+.terraform/
+.terraform.lock.hcl
+
+# Environment
+.env
+*.pem
+*.key
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build
+target/
+dist/
+build/
+
+# AWS
+*.zip
+.aws-sam/
