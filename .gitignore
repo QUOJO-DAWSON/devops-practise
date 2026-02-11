@@ -35,3 +35,7 @@ package-lock.json
 # Lambda packages
 *.zip
 lambda.zip
+
+
+# Portfolio screenshots (local only)
+portfolio-screenshots/
