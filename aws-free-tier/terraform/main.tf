@@ -5,14 +5,14 @@
 
 terraform {
   required_version = ">= 1.0"
-  
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
   }
-  
+
   # Backend configuration for state management
   # Uncomment after creating S3 bucket and DynamoDB table
   # backend "s3" {
@@ -156,9 +156,9 @@ resource "aws_cloudfront_distribution" "portfolio_cdn" {
 # ============================================
 
 resource "aws_dynamodb_table" "visitor_counter" {
-  name           = "${var.project_name}-visitor-counter"
-  billing_mode   = "PAY_PER_REQUEST" # Free tier eligible
-  hash_key       = "id"
+  name         = "${var.project_name}-visitor-counter"
+  billing_mode = "PAY_PER_REQUEST" # Free tier eligible
+  hash_key     = "id"
 
   attribute {
     name = "id"
@@ -252,7 +252,7 @@ resource "aws_lambda_function" "visitor_counter" {
 resource "aws_apigatewayv2_api" "visitor_api" {
   name          = "${var.project_name}-visitor-api"
   protocol_type = "HTTP"
-  
+
   cors_configuration {
     allow_origins = ["*"]
     allow_methods = ["GET", "POST", "OPTIONS"]
@@ -275,10 +275,10 @@ resource "aws_apigatewayv2_stage" "visitor_api" {
 }
 
 resource "aws_apigatewayv2_integration" "lambda_integration" {
-  api_id               = aws_apigatewayv2_api.visitor_api.id
-  integration_type     = "AWS_PROXY"
-  integration_method   = "POST"
-  integration_uri      = aws_lambda_function.visitor_counter.invoke_arn
+  api_id                 = aws_apigatewayv2_api.visitor_api.id
+  integration_type       = "AWS_PROXY"
+  integration_method     = "POST"
+  integration_uri        = aws_lambda_function.visitor_counter.invoke_arn
   payload_format_version = "2.0"
 }
 

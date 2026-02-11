@@ -1,342 +1,372 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QUOJO DAWSON - DevOps Engineer Portfolio</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GEORGE DAWSON-KESSON - DevOps Engineer Portfolio</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+      }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
 
-        header {
-            text-align: center;
-            padding: 60px 20px;
-            color: white;
-        }
+      header {
+        text-align: center;
+        padding: 60px 20px;
+        color: white;
+      }
 
+      h1 {
+        font-size: 3em;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .tagline {
+        font-size: 1.3em;
+        margin-bottom: 30px;
+        opacity: 0.9;
+      }
+
+      .main-content {
+        background: white;
+        border-radius: 15px;
+        padding: 40px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        margin-bottom: 30px;
+      }
+
+      .section {
+        margin-bottom: 40px;
+      }
+
+      h2 {
+        color: #667eea;
+        margin-bottom: 20px;
+        font-size: 2em;
+        border-bottom: 3px solid #667eea;
+        padding-bottom: 10px;
+      }
+
+      .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+      }
+
+      .skill-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        transition: transform 0.3s;
+      }
+
+      .skill-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .skill-card h3 {
+        margin-bottom: 10px;
+        font-size: 1.3em;
+      }
+
+      .project-card {
+        background: #f8f9fa;
+        padding: 25px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        border-left: 5px solid #667eea;
+      }
+
+      .project-card h3 {
+        color: #667eea;
+        margin-bottom: 10px;
+      }
+
+      .badge {
+        display: inline-block;
+        background: #667eea;
+        color: white;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.9em;
+        margin-right: 10px;
+        margin-top: 10px;
+      }
+
+      .visitor-counter {
+        text-align: center;
+        padding: 30px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 15px;
+        margin-top: 30px;
+      }
+
+      .visitor-count {
+        font-size: 3em;
+        font-weight: bold;
+        margin: 10px 0;
+      }
+
+      .contact-links {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-top: 30px;
+      }
+
+      .contact-btn {
+        background: white;
+        color: #667eea;
+        padding: 15px 30px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: all 0.3s;
+        border: 2px solid white;
+      }
+
+      .contact-btn:hover {
+        background: #667eea;
+        color: white;
+        transform: scale(1.05);
+      }
+
+      footer {
+        text-align: center;
+        color: white;
+        padding: 30px;
+        font-size: 0.9em;
+      }
+
+      .loading {
+        color: #999;
+        font-style: italic;
+      }
+
+      .tech-stack {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 15px;
+      }
+
+      @media (max-width: 768px) {
         h1 {
-            font-size: 3em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+          font-size: 2em;
         }
 
         .tagline {
-            font-size: 1.3em;
-            margin-bottom: 30px;
-            opacity: 0.9;
-        }
-
-        .main-content {
-            background: white;
-            border-radius: 15px;
-            padding: 40px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            margin-bottom: 30px;
-        }
-
-        .section {
-            margin-bottom: 40px;
-        }
-
-        h2 {
-            color: #667eea;
-            margin-bottom: 20px;
-            font-size: 2em;
-            border-bottom: 3px solid #667eea;
-            padding-bottom: 10px;
+          font-size: 1.1em;
         }
 
         .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
+          grid-template-columns: 1fr;
         }
-
-        .skill-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            transition: transform 0.3s;
-        }
-
-        .skill-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .skill-card h3 {
-            margin-bottom: 10px;
-            font-size: 1.3em;
-        }
-
-        .project-card {
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            border-left: 5px solid #667eea;
-        }
-
-        .project-card h3 {
-            color: #667eea;
-            margin-bottom: 10px;
-        }
-
-        .badge {
-            display: inline-block;
-            background: #667eea;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            margin-right: 10px;
-            margin-top: 10px;
-        }
-
-        .visitor-counter {
-            text-align: center;
-            padding: 30px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 15px;
-            margin-top: 30px;
-        }
-
-        .visitor-count {
-            font-size: 3em;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-
-        .contact-links {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 30px;
-        }
-
-        .contact-btn {
-            background: white;
-            color: #667eea;
-            padding: 15px 30px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s;
-            border: 2px solid white;
-        }
-
-        .contact-btn:hover {
-            background: #667eea;
-            color: white;
-            transform: scale(1.05);
-        }
-
-        footer {
-            text-align: center;
-            color: white;
-            padding: 30px;
-            font-size: 0.9em;
-        }
-
-        .loading {
-            color: #999;
-            font-style: italic;
-        }
-
-        .tech-stack {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2em;
-            }
-            
-            .tagline {
-                font-size: 1.1em;
-            }
-            
-            .skills-grid {
-                grid-template-columns: 1fr;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <header>
-            <h1>QUOJO DAWSON</h1>
-            <p class="tagline">DevOps Engineer | Cloud Architect | Automation Specialist</p>
-        </header>
+      <header>
+        <h1>GEORGE DAWSON-KESSON</h1>
+        <p class="tagline">
+          DevOps Engineer | Cloud Architect | Automation Specialist
+        </p>
+      </header>
 
-        <div class="main-content">
-            <div class="section">
-                <h2>👨‍💻 About Me</h2>
-                <p>
-                    Passionate DevOps Engineer with expertise in cloud infrastructure, automation, and CI/CD pipelines. 
-                    AWS Certified with hands-on experience in designing and implementing production-grade infrastructure 
-                    using Infrastructure as Code, containerization, and modern DevOps practices.
-                </p>
-            </div>
-
-            <div class="section">
-                <h2>🚀 Core Skills</h2>
-                <div class="skills-grid">
-                    <div class="skill-card">
-                        <h3>☁️ Cloud Platforms</h3>
-                        <p>AWS (Associate Certified)<br>Infrastructure Design<br>Cost Optimization</p>
-                    </div>
-                    <div class="skill-card">
-                        <h3>🐳 Containerization</h3>
-                        <p>Docker<br>Kubernetes<br>EKS Clusters</p>
-                    </div>
-                    <div class="skill-card">
-                        <h3>⚙️ Infrastructure as Code</h3>
-                        <p>Terraform<br>Ansible<br>CloudFormation</p>
-                    </div>
-                    <div class="skill-card">
-                        <h3>🔄 CI/CD</h3>
-                        <p>GitHub Actions<br>Jenkins<br>GitOps</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <h2>📁 Featured Projects</h2>
-                
-                <div class="project-card">
-                    <h3>DevOps Automation Platform</h3>
-                    <p>
-                        Production-ready infrastructure automation with multi-stage CI/CD pipelines, automated security scanning, 
-                        and comprehensive monitoring. Demonstrates end-to-end DevOps practices.
-                    </p>
-                    <div class="tech-stack">
-                        <span class="badge">Terraform</span>
-                        <span class="badge">Kubernetes</span>
-                        <span class="badge">GitHub Actions</span>
-                        <span class="badge">Prometheus</span>
-                        <span class="badge">Grafana</span>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <h3>Serverless Portfolio Website</h3>
-                    <p>
-                        This website! Built using AWS serverless architecture with S3, CloudFront, Lambda, API Gateway, 
-                        and DynamoDB. Fully automated deployment with Terraform.
-                    </p>
-                    <div class="tech-stack">
-                        <span class="badge">AWS Lambda</span>
-                        <span class="badge">API Gateway</span>
-                        <span class="badge">DynamoDB</span>
-                        <span class="badge">CloudFront</span>
-                        <span class="badge">S3</span>
-                    </div>
-                </div>
-
-                <div class="project-card">
-                    <h3>AWS Well-Architected Infrastructure</h3>
-                    <p>
-                        Multi-tier AWS infrastructure following best practices for security, reliability, performance, 
-                        cost optimization, and operational excellence.
-                    </p>
-                    <div class="tech-stack">
-                        <span class="badge">AWS VPC</span>
-                        <span class="badge">EKS</span>
-                        <span class="badge">RDS</span>
-                        <span class="badge">CloudWatch</span>
-                        <span class="badge">Auto Scaling</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <h2>🎓 Certifications</h2>
-                <p>✅ AWS Certified Solutions Architect - Associate</p>
-            </div>
-
-            <div class="section">
-                <h2>📞 Get In Touch</h2>
-                <div class="contact-links">
-                    <a href="https://github.com/QUOJO-DAWSON" class="contact-btn" target="_blank">GitHub</a>
-                    <a href="https://linkedin.com/in/quojo-dawson" class="contact-btn" target="_blank">LinkedIn</a>
-                </div>
-            </div>
+      <div class="main-content">
+        <div class="section">
+          <h2>👨‍💻 About Me</h2>
+          <p>
+            Passionate DevOps Engineer with expertise in cloud infrastructure,
+            automation, and CI/CD pipelines. AWS Certified with hands-on
+            experience in designing and implementing production-grade
+            infrastructure using Infrastructure as Code, containerization, and
+            modern DevOps practices.
+          </p>
         </div>
 
-        <div class="visitor-counter">
-            <h2>👥 Visitor Counter</h2>
-            <p>Total Visitors</p>
-            <div class="visitor-count" id="visitorCount">
-                <span class="loading">Loading...</span>
+        <div class="section">
+          <h2>🚀 Core Skills</h2>
+          <div class="skills-grid">
+            <div class="skill-card">
+              <h3>☁️ Cloud Platforms</h3>
+              <p>
+                AWS (Associate Certified)<br />Infrastructure Design<br />Cost
+                Optimization
+              </p>
             </div>
-            <p style="font-size: 0.9em; opacity: 0.8; margin-top: 10px;">
-                Powered by AWS Lambda + DynamoDB
-            </p>
+            <div class="skill-card">
+              <h3>🐳 Containerization</h3>
+              <p>Docker<br />Kubernetes<br />EKS Clusters</p>
+            </div>
+            <div class="skill-card">
+              <h3>⚙️ Infrastructure as Code</h3>
+              <p>Terraform<br />Ansible<br />CloudFormation</p>
+            </div>
+            <div class="skill-card">
+              <h3>🔄 CI/CD</h3>
+              <p>GitHub Actions<br />Jenkins<br />GitOps</p>
+            </div>
+          </div>
         </div>
 
-        <footer>
-            <p>&copy; 2026 QUOJO DAWSON | Built with ❤️ using AWS Serverless Architecture</p>
-            <p style="margin-top: 10px; opacity: 0.8;">
-                Infrastructure: Terraform | CI/CD: GitHub Actions | Hosting: CloudFront + S3
+        <div class="section">
+          <h2>📁 Featured Projects</h2>
+
+          <div class="project-card">
+            <h3>DevOps Automation Platform</h3>
+            <p>
+              Production-ready infrastructure automation with multi-stage CI/CD
+              pipelines, automated security scanning, and comprehensive
+              monitoring. Demonstrates end-to-end DevOps practices.
             </p>
-        </footer>
+            <div class="tech-stack">
+              <span class="badge">Terraform</span>
+              <span class="badge">Kubernetes</span>
+              <span class="badge">GitHub Actions</span>
+              <span class="badge">Prometheus</span>
+              <span class="badge">Grafana</span>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <h3>Serverless Portfolio Website</h3>
+            <p>
+              This website! Built using AWS serverless architecture with S3,
+              CloudFront, Lambda, API Gateway, and DynamoDB. Fully automated
+              deployment with Terraform.
+            </p>
+            <div class="tech-stack">
+              <span class="badge">AWS Lambda</span>
+              <span class="badge">API Gateway</span>
+              <span class="badge">DynamoDB</span>
+              <span class="badge">CloudFront</span>
+              <span class="badge">S3</span>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <h3>AWS Well-Architected Infrastructure</h3>
+            <p>
+              Multi-tier AWS infrastructure following best practices for
+              security, reliability, performance, cost optimization, and
+              operational excellence.
+            </p>
+            <div class="tech-stack">
+              <span class="badge">AWS VPC</span>
+              <span class="badge">EKS</span>
+              <span class="badge">RDS</span>
+              <span class="badge">CloudWatch</span>
+              <span class="badge">Auto Scaling</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>🎓 Certifications</h2>
+          <p>✅ AWS Certified Solutions Architect - Associate</p>
+        </div>
+
+        <div class="section">
+          <h2>📞 Get In Touch</h2>
+          <div class="contact-links">
+            <a
+              href="https://github.com/QUOJO-DAWSON"
+              class="contact-btn"
+              target="_blank"
+              >GitHub</a
+            >
+            <a
+              href="https://linkedin.com/in/quojo-dawson"
+              class="contact-btn"
+              target="_blank"
+              >LinkedIn</a
+            >
+          </div>
+        </div>
+      </div>
+
+      <div class="visitor-counter">
+        <h2>👥 Visitor Counter</h2>
+        <p>Total Visitors</p>
+        <div class="visitor-count" id="visitorCount">
+          <span class="loading">Loading...</span>
+        </div>
+        <p style="font-size: 0.9em; opacity: 0.8; margin-top: 10px">
+          Powered by AWS Lambda + DynamoDB
+        </p>
+      </div>
+
+      <footer>
+        <p>
+          &copy; 2026 GEORGE DAWSON-KESSON | Built with ❤️ using AWS Serverless
+          Architecture
+        </p>
+        <p style="margin-top: 10px; opacity: 0.8">
+          Infrastructure: Terraform | CI/CD: GitHub Actions | Hosting:
+          CloudFront + S3
+        </p>
+      </footer>
     </div>
 
     <script>
-        // Fetch visitor count from API Gateway
-        async function updateVisitorCount() {
-            try {
-                // Replace this URL with your actual API Gateway endpoint after deployment
-                const API_ENDPOINT = 'YOUR_API_GATEWAY_ENDPOINT_HERE/count';
-                
-                const response = await fetch(API_ENDPOINT);
-                const data = await response.json();
-                
-                const countElement = document.getElementById('visitorCount');
-                countElement.innerHTML = data.count.toLocaleString();
-                
-                // Add animation
-                countElement.style.animation = 'fadeIn 0.5s';
-                
-            } catch (error) {
-                console.error('Error fetching visitor count:', error);
-                document.getElementById('visitorCount').innerHTML = '---';
-            }
-        }
+      // Fetch visitor count from API Gateway
+      async function updateVisitorCount() {
+        try {
+          // Replace this URL with your actual API Gateway endpoint after deployment
+          const API_ENDPOINT =
+            "https://mmavaok010.execute-api.us-east-2.amazonaws.com/count";
 
-        // Update count when page loads
-        window.addEventListener('load', updateVisitorCount);
+          const response = await fetch(API_ENDPOINT);
+          const data = await response.json();
+
+          const countElement = document.getElementById("visitorCount");
+          countElement.innerHTML = data.count.toLocaleString();
+
+          // Add animation
+          countElement.style.animation = "fadeIn 0.5s";
+        } catch (error) {
+          console.error("Error fetching visitor count:", error);
+          document.getElementById("visitorCount").innerHTML = "---";
+        }
+      }
+
+      // Update count when page loads
+      window.addEventListener("load", updateVisitorCount);
     </script>
 
     <style>
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.8);
         }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
     </style>
-</body>
+  </body>
 </html>

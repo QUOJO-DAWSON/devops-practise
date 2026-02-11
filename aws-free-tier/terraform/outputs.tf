@@ -50,11 +50,11 @@ output "cloudwatch_dashboard_url" {
 output "deployment_summary" {
   description = "Summary of deployed resources"
   value = {
-    website_url      = "https://${aws_cloudfront_distribution.portfolio_cdn.domain_name}"
-    api_url          = "${aws_apigatewayv2_api.visitor_api.api_endpoint}/count"
-    s3_bucket        = aws_s3_bucket.portfolio_website.id
-    lambda_function  = aws_lambda_function.visitor_counter.function_name
-    dynamodb_table   = aws_dynamodb_table.visitor_counter.name
-    cost_estimate    = "$0.00 (Free Tier)"
+    website_url     = "https://${aws_cloudfront_distribution.portfolio_cdn.domain_name}"
+    api_url         = "${aws_apigatewayv2_api.visitor_api.api_endpoint}/count"
+    s3_bucket       = aws_s3_bucket.portfolio_website.id
+    lambda_function = aws_lambda_function.visitor_counter.function_name
+    dynamodb_table  = aws_dynamodb_table.visitor_counter.name
+    cost_estimate   = "$0.00 (Free Tier)"
   }
 }
