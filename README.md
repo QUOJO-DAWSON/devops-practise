@@ -1,4 +1,4 @@
-# 🚀 DevOps Practice Repository
+﻿# ðŸš€ DevOps Practice Repository
 
 ![DevOps](https://img.shields.io/badge/DevOps-Practice-blue?style=for-the-badge)
 ![Shell Script](https://img.shields.io/badge/shell_script-%23121011.svg?style=for-the-badge&logo=gnu-bash&logoColor=white)
@@ -13,7 +13,7 @@
 
 ---
 
-## 📋 Table of Contents
+## ðŸ“‹ Table of Contents
 
 - [Overview](#overview)
 - [Features](#features)
@@ -32,7 +32,7 @@
 
 ---
 
-## 🎯 Overview
+## ðŸŽ¯ Overview
 
 This repository demonstrates real-world DevOps practices and automation techniques used in production environments. It includes:
 
@@ -43,7 +43,7 @@ This repository demonstrates real-world DevOps practices and automation techniqu
 - **Monitoring and alerting** setup with Prometheus and Grafana
 - **Security scanning** and compliance automation
 
-### 💼 Business Value
+### ðŸ’¼ Business Value
 
 - **Reduces deployment time** by 70% through automation
 - **Minimizes human error** with standardized processes
@@ -53,90 +53,90 @@ This repository demonstrates real-world DevOps practices and automation techniqu
 
 ---
 
-## ✨ Features
+## âœ¨ Features
 
-### 🔄 CI/CD Automation
-- ✅ Multi-stage pipeline configurations
-- ✅ Automated testing and code quality checks
-- ✅ Container image building and scanning
-- ✅ Blue-green and canary deployment strategies
-- ✅ Automated rollback mechanisms
+### ðŸ”„ CI/CD Automation
+- âœ… Multi-stage pipeline configurations
+- âœ… Automated testing and code quality checks
+- âœ… Container image building and scanning
+- âœ… Blue-green and canary deployment strategies
+- âœ… Automated rollback mechanisms
 
-### ☁️ Cloud Infrastructure
-- ✅ AWS resource provisioning with Terraform
-- ✅ Azure infrastructure automation
-- ✅ Multi-cloud deployment strategies
-- ✅ Auto-scaling configurations
-- ✅ Cost optimization scripts
+### â˜ï¸ Cloud Infrastructure
+- âœ… AWS resource provisioning with Terraform
+- âœ… Azure infrastructure automation
+- âœ… Multi-cloud deployment strategies
+- âœ… Auto-scaling configurations
+- âœ… Cost optimization scripts
 
-### 🐳 Containerization
-- ✅ Optimized Dockerfiles with multi-stage builds
-- ✅ Docker Compose for local development
-- ✅ Kubernetes manifests and Helm charts
-- ✅ Service mesh integration (Istio)
-- ✅ Container security scanning
+### ðŸ³ Containerization
+- âœ… Optimized Dockerfiles with multi-stage builds
+- âœ… Docker Compose for local development
+- âœ… Kubernetes manifests and Helm charts
+- âœ… Service mesh integration (Istio)
+- âœ… Container security scanning
 
-### 📊 Monitoring & Observability
-- ✅ Prometheus metric collection
-- ✅ Grafana dashboard configurations
-- ✅ ELK stack setup for log aggregation
-- ✅ Custom alerting rules
-- ✅ Distributed tracing with Jaeger
+### ðŸ“Š Monitoring & Observability
+- âœ… Prometheus metric collection
+- âœ… Grafana dashboard configurations
+- âœ… ELK stack setup for log aggregation
+- âœ… Custom alerting rules
+- âœ… Distributed tracing with Jaeger
 
-### 🔒 Security
-- ✅ Secrets management with Vault
-- ✅ SAST/DAST integration
-- ✅ Container vulnerability scanning
-- ✅ Network policies and firewall rules
-- ✅ Compliance automation (CIS benchmarks)
-
----
-
-## 🏗️ Architecture
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                         Developer                            │
-└─────────────────┬───────────────────────────────────────────┘
-                  │
-                  ▼
-┌─────────────────────────────────────────────────────────────┐
-│                    Version Control (GitHub)                  │
-└─────────────────┬───────────────────────────────────────────┘
-                  │
-                  ▼
-┌─────────────────────────────────────────────────────────────┐
-│              CI/CD Pipeline (Jenkins/GitHub Actions)         │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐   │
-│  │   Build  │→ │   Test   │→ │  Scan    │→ │  Deploy  │   │
-│  └──────────┘  └──────────┘  └──────────┘  └──────────┘   │
-└─────────────────┬───────────────────────────────────────────┘
-                  │
-                  ▼
-┌─────────────────────────────────────────────────────────────┐
-│        Container Registry (ECR/Docker Hub/ACR)              │
-└─────────────────┬───────────────────────────────────────────┘
-                  │
-                  ▼
-┌─────────────────────────────────────────────────────────────┐
-│           Kubernetes Cluster (EKS/AKS/GKE)                  │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐                  │
-│  │   Dev    │  │  Staging │  │   Prod   │                  │
-│  └──────────┘  └──────────┘  └──────────┘                  │
-└─────────────────┬───────────────────────────────────────────┘
-                  │
-                  ▼
-┌─────────────────────────────────────────────────────────────┐
-│              Monitoring & Logging                            │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐                  │
-│  │Prometheus│  │ Grafana  │  │   ELK    │                  │
-│  └──────────┘  └──────────┘  └──────────┘                  │
-└─────────────────────────────────────────────────────────────┘
-```
+### ðŸ”’ Security
+- âœ… Secrets management with Vault
+- âœ… SAST/DAST integration
+- âœ… Container vulnerability scanning
+- âœ… Network policies and firewall rules
+- âœ… Compliance automation (CIS benchmarks)
 
 ---
 
-## 📦 Prerequisites
+## ðŸ—ï¸ Architecture
+
+```
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚                         Developer                            â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+                  â”‚
+                  â–¼
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚                    Version Control (GitHub)                  â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+                  â”‚
+                  â–¼
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚              CI/CD Pipeline (Jenkins/GitHub Actions)         â”‚
+â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”   â”‚
+â”‚  â”‚   Build  â”‚â†’ â”‚   Test   â”‚â†’ â”‚  Scan    â”‚â†’ â”‚  Deploy  â”‚   â”‚
+â”‚  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜   â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+                  â”‚
+                  â–¼
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚        Container Registry (ECR/Docker Hub/ACR)              â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+                  â”‚
+                  â–¼
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚           Kubernetes Cluster (EKS/AKS/GKE)                  â”‚
+â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”                  â”‚
+â”‚  â”‚   Dev    â”‚  â”‚  Staging â”‚  â”‚   Prod   â”‚                  â”‚
+â”‚  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜                  â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+                  â”‚
+                  â–¼
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚              Monitoring & Logging                            â”‚
+â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”                  â”‚
+â”‚  â”‚Prometheusâ”‚  â”‚ Grafana  â”‚  â”‚   ELK    â”‚                  â”‚
+â”‚  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜                  â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+```
+
+---
+
+## ðŸ“¦ Prerequisites
 
 ### Required Tools
 - **Docker** >= 20.10
@@ -157,7 +157,7 @@ This repository demonstrates real-world DevOps practices and automation techniqu
 
 ---
 
-## 🚀 Quick Start
+## ðŸš€ Quick Start
 
 ### 1. Clone the Repository
 ```bash
@@ -200,150 +200,150 @@ kubectl port-forward svc/grafana 3000:3000 -n monitoring
 
 ---
 
-## 📁 Project Structure
+## ðŸ“ Project Structure
 
 ```
 devops-practise/
-├── README.md                          # This file
-├── CONTRIBUTING.md                    # Contribution guidelines
-├── LICENSE                            # MIT License
-├── .gitignore                         # Git ignore rules
-├── .env.example                       # Environment variables template
-│
-├── docs/                              # Documentation
-│   ├── architecture.md                # System architecture details
-│   ├── best-practices.md              # DevOps best practices
-│   ├── troubleshooting.md             # Common issues and solutions
-│   └── api-reference.md               # Script API documentation
-│
-├── scripts/                           # Automation scripts
-│   ├── setup/                         # Initial setup scripts
-│   │   ├── check-prerequisites.sh     # Check required tools
-│   │   ├── setup-local-env.sh         # Local environment setup
-│   │   └── install-tools.sh           # Install DevOps tools
-│   │
-│   ├── deployment/                    # Deployment automation
-│   │   ├── deploy-local.sh            # Local deployment
-│   │   ├── deploy-aws.sh              # AWS deployment
-│   │   ├── deploy-azure.sh            # Azure deployment
-│   │   ├── rollback.sh                # Automated rollback
-│   │   └── blue-green-deploy.sh       # Blue-green deployment
-│   │
-│   ├── monitoring/                    # Monitoring setup
-│   │   ├── setup-prometheus.sh        # Prometheus installation
-│   │   ├── setup-grafana.sh           # Grafana setup
-│   │   ├── configure-alerts.sh        # Alert configuration
-│   │   └── health-check.sh            # Health monitoring
-│   │
-│   ├── automation/                    # General automation
-│   │   ├── backup.sh                  # Backup automation
-│   │   ├── cleanup.sh                 # Resource cleanup
-│   │   ├── scale.sh                   # Auto-scaling
-│   │   └── cost-optimizer.sh          # Cost optimization
-│   │
-│   └── security/                      # Security scripts
-│       ├── scan-vulnerabilities.sh    # Vulnerability scanning
-│       ├── rotate-secrets.sh          # Secret rotation
-│       ├── audit-compliance.sh        # Compliance checking
-│       └── harden-system.sh           # System hardening
-│
-├── ci-cd/                             # CI/CD configurations
-│   ├── jenkins/                       # Jenkins pipelines
-│   │   ├── Jenkinsfile                # Main pipeline
-│   │   ├── Jenkinsfile.build          # Build stage
-│   │   └── Jenkinsfile.deploy         # Deploy stage
-│   │
-│   ├── github-actions/                # GitHub Actions workflows
-│   │   ├── ci.yml                     # Continuous Integration
-│   │   ├── cd.yml                     # Continuous Deployment
-│   │   ├── security-scan.yml          # Security scanning
-│   │   └── terraform-plan.yml         # Infrastructure preview
-│   │
-│   └── gitlab-ci/                     # GitLab CI/CD
-│       └── .gitlab-ci.yml             # GitLab pipeline
-│
-├── infrastructure/                    # Infrastructure as Code
-│   ├── terraform/                     # Terraform configurations
-│   │   ├── aws/                       # AWS resources
-│   │   │   ├── main.tf
-│   │   │   ├── variables.tf
-│   │   │   ├── outputs.tf
-│   │   │   └── modules/
-│   │   │       ├── vpc/
-│   │   │       ├── eks/
-│   │   │       └── rds/
-│   │   │
-│   │   └── azure/                     # Azure resources
-│   │       ├── main.tf
-│   │       └── modules/
-│   │
-│   ├── ansible/                       # Ansible playbooks
-│   │   ├── playbooks/
-│   │   │   ├── install-docker.yml
-│   │   │   ├── setup-k8s.yml
-│   │   │   └── configure-monitoring.yml
-│   │   │
-│   │   └── roles/                     # Ansible roles
-│   │       ├── common/
-│   │       ├── docker/
-│   │       └── kubernetes/
-│   │
-│   └── kubernetes/                    # Kubernetes manifests
-│       ├── base/                      # Base configurations
-│       │   ├── namespace.yaml
-│       │   ├── deployment.yaml
-│       │   ├── service.yaml
-│       │   └── ingress.yaml
-│       │
-│       ├── overlays/                  # Environment-specific
-│       │   ├── dev/
-│       │   ├── staging/
-│       │   └── production/
-│       │
-│       └── helm/                      # Helm charts
-│           └── app-chart/
-│               ├── Chart.yaml
-│               ├── values.yaml
-│               └── templates/
-│
-├── monitoring/                        # Monitoring configurations
-│   ├── prometheus/
-│   │   ├── prometheus.yml
-│   │   ├── alert-rules.yml
-│   │   └── recording-rules.yml
-│   │
-│   ├── grafana/
-│   │   ├── dashboards/
-│   │   │   ├── application.json
-│   │   │   ├── infrastructure.json
-│   │   │   └── kubernetes.json
-│   │   └── datasources.yml
-│   │
-│   └── elk/
-│       ├── logstash.conf
-│       ├── elasticsearch.yml
-│       └── kibana.yml
-│
-├── docker/                            # Docker configurations
-│   ├── Dockerfile                     # Main application
-│   ├── Dockerfile.nginx               # Nginx
-│   ├── docker-compose.yml             # Local stack
-│   └── docker-compose.prod.yml        # Production stack
-│
-├── tests/                             # Test scripts
-│   ├── unit/
-│   ├── integration/
-│   └── e2e/
-│
-└── examples/                          # Usage examples
-    ├── simple-deployment/
-    ├── microservices/
-    └── serverless/
+â”œâ”€â”€ README.md                          # This file
+â”œâ”€â”€ CONTRIBUTING.md                    # Contribution guidelines
+â”œâ”€â”€ LICENSE                            # MIT License
+â”œâ”€â”€ .gitignore                         # Git ignore rules
+â”œâ”€â”€ .env.example                       # Environment variables template
+â”‚
+â”œâ”€â”€ docs/                              # Documentation
+â”‚   â”œâ”€â”€ architecture.md                # System architecture details
+â”‚   â”œâ”€â”€ best-practices.md              # DevOps best practices
+â”‚   â”œâ”€â”€ troubleshooting.md             # Common issues and solutions
+â”‚   â””â”€â”€ api-reference.md               # Script API documentation
+â”‚
+â”œâ”€â”€ scripts/                           # Automation scripts
+â”‚   â”œâ”€â”€ setup/                         # Initial setup scripts
+â”‚   â”‚   â”œâ”€â”€ check-prerequisites.sh     # Check required tools
+â”‚   â”‚   â”œâ”€â”€ setup-local-env.sh         # Local environment setup
+â”‚   â”‚   â””â”€â”€ install-tools.sh           # Install DevOps tools
+â”‚   â”‚
+â”‚   â”œâ”€â”€ deployment/                    # Deployment automation
+â”‚   â”‚   â”œâ”€â”€ deploy-local.sh            # Local deployment
+â”‚   â”‚   â”œâ”€â”€ deploy-aws.sh              # AWS deployment
+â”‚   â”‚   â”œâ”€â”€ deploy-azure.sh            # Azure deployment
+â”‚   â”‚   â”œâ”€â”€ rollback.sh                # Automated rollback
+â”‚   â”‚   â””â”€â”€ blue-green-deploy.sh       # Blue-green deployment
+â”‚   â”‚
+â”‚   â”œâ”€â”€ monitoring/                    # Monitoring setup
+â”‚   â”‚   â”œâ”€â”€ setup-prometheus.sh        # Prometheus installation
+â”‚   â”‚   â”œâ”€â”€ setup-grafana.sh           # Grafana setup
+â”‚   â”‚   â”œâ”€â”€ configure-alerts.sh        # Alert configuration
+â”‚   â”‚   â””â”€â”€ health-check.sh            # Health monitoring
+â”‚   â”‚
+â”‚   â”œâ”€â”€ automation/                    # General automation
+â”‚   â”‚   â”œâ”€â”€ backup.sh                  # Backup automation
+â”‚   â”‚   â”œâ”€â”€ cleanup.sh                 # Resource cleanup
+â”‚   â”‚   â”œâ”€â”€ scale.sh                   # Auto-scaling
+â”‚   â”‚   â””â”€â”€ cost-optimizer.sh          # Cost optimization
+â”‚   â”‚
+â”‚   â””â”€â”€ security/                      # Security scripts
+â”‚       â”œâ”€â”€ scan-vulnerabilities.sh    # Vulnerability scanning
+â”‚       â”œâ”€â”€ rotate-secrets.sh          # Secret rotation
+â”‚       â”œâ”€â”€ audit-compliance.sh        # Compliance checking
+â”‚       â””â”€â”€ harden-system.sh           # System hardening
+â”‚
+â”œâ”€â”€ ci-cd/                             # CI/CD configurations
+â”‚   â”œâ”€â”€ jenkins/                       # Jenkins pipelines
+â”‚   â”‚   â”œâ”€â”€ Jenkinsfile                # Main pipeline
+â”‚   â”‚   â”œâ”€â”€ Jenkinsfile.build          # Build stage
+â”‚   â”‚   â””â”€â”€ Jenkinsfile.deploy         # Deploy stage
+â”‚   â”‚
+â”‚   â”œâ”€â”€ github-actions/                # GitHub Actions workflows
+â”‚   â”‚   â”œâ”€â”€ ci.yml                     # Continuous Integration
+â”‚   â”‚   â”œâ”€â”€ cd.yml                     # Continuous Deployment
+â”‚   â”‚   â”œâ”€â”€ security-scan.yml          # Security scanning
+â”‚   â”‚   â””â”€â”€ terraform-plan.yml         # Infrastructure preview
+â”‚   â”‚
+â”‚   â””â”€â”€ gitlab-ci/                     # GitLab CI/CD
+â”‚       â””â”€â”€ .gitlab-ci.yml             # GitLab pipeline
+â”‚
+â”œâ”€â”€ infrastructure/                    # Infrastructure as Code
+â”‚   â”œâ”€â”€ terraform/                     # Terraform configurations
+â”‚   â”‚   â”œâ”€â”€ aws/                       # AWS resources
+â”‚   â”‚   â”‚   â”œâ”€â”€ main.tf
+â”‚   â”‚   â”‚   â”œâ”€â”€ variables.tf
+â”‚   â”‚   â”‚   â”œâ”€â”€ outputs.tf
+â”‚   â”‚   â”‚   â””â”€â”€ modules/
+â”‚   â”‚   â”‚       â”œâ”€â”€ vpc/
+â”‚   â”‚   â”‚       â”œâ”€â”€ eks/
+â”‚   â”‚   â”‚       â””â”€â”€ rds/
+â”‚   â”‚   â”‚
+â”‚   â”‚   â””â”€â”€ azure/                     # Azure resources
+â”‚   â”‚       â”œâ”€â”€ main.tf
+â”‚   â”‚       â””â”€â”€ modules/
+â”‚   â”‚
+â”‚   â”œâ”€â”€ ansible/                       # Ansible playbooks
+â”‚   â”‚   â”œâ”€â”€ playbooks/
+â”‚   â”‚   â”‚   â”œâ”€â”€ install-docker.yml
+â”‚   â”‚   â”‚   â”œâ”€â”€ setup-k8s.yml
+â”‚   â”‚   â”‚   â””â”€â”€ configure-monitoring.yml
+â”‚   â”‚   â”‚
+â”‚   â”‚   â””â”€â”€ roles/                     # Ansible roles
+â”‚   â”‚       â”œâ”€â”€ common/
+â”‚   â”‚       â”œâ”€â”€ docker/
+â”‚   â”‚       â””â”€â”€ kubernetes/
+â”‚   â”‚
+â”‚   â””â”€â”€ kubernetes/                    # Kubernetes manifests
+â”‚       â”œâ”€â”€ base/                      # Base configurations
+â”‚       â”‚   â”œâ”€â”€ namespace.yaml
+â”‚       â”‚   â”œâ”€â”€ deployment.yaml
+â”‚       â”‚   â”œâ”€â”€ service.yaml
+â”‚       â”‚   â””â”€â”€ ingress.yaml
+â”‚       â”‚
+â”‚       â”œâ”€â”€ overlays/                  # Environment-specific
+â”‚       â”‚   â”œâ”€â”€ dev/
+â”‚       â”‚   â”œâ”€â”€ staging/
+â”‚       â”‚   â””â”€â”€ production/
+â”‚       â”‚
+â”‚       â””â”€â”€ helm/                      # Helm charts
+â”‚           â””â”€â”€ app-chart/
+â”‚               â”œâ”€â”€ Chart.yaml
+â”‚               â”œâ”€â”€ values.yaml
+â”‚               â””â”€â”€ templates/
+â”‚
+â”œâ”€â”€ monitoring/                        # Monitoring configurations
+â”‚   â”œâ”€â”€ prometheus/
+â”‚   â”‚   â”œâ”€â”€ prometheus.yml
+â”‚   â”‚   â”œâ”€â”€ alert-rules.yml
+â”‚   â”‚   â””â”€â”€ recording-rules.yml
+â”‚   â”‚
+â”‚   â”œâ”€â”€ grafana/
+â”‚   â”‚   â”œâ”€â”€ dashboards/
+â”‚   â”‚   â”‚   â”œâ”€â”€ application.json
+â”‚   â”‚   â”‚   â”œâ”€â”€ infrastructure.json
+â”‚   â”‚   â”‚   â””â”€â”€ kubernetes.json
+â”‚   â”‚   â””â”€â”€ datasources.yml
+â”‚   â”‚
+â”‚   â””â”€â”€ elk/
+â”‚       â”œâ”€â”€ logstash.conf
+â”‚       â”œâ”€â”€ elasticsearch.yml
+â”‚       â””â”€â”€ kibana.yml
+â”‚
+â”œâ”€â”€ docker/                            # Docker configurations
+â”‚   â”œâ”€â”€ Dockerfile                     # Main application
+â”‚   â”œâ”€â”€ Dockerfile.nginx               # Nginx
+â”‚   â”œâ”€â”€ docker-compose.yml             # Local stack
+â”‚   â””â”€â”€ docker-compose.prod.yml        # Production stack
+â”‚
+â”œâ”€â”€ tests/                             # Test scripts
+â”‚   â”œâ”€â”€ unit/
+â”‚   â”œâ”€â”€ integration/
+â”‚   â””â”€â”€ e2e/
+â”‚
+â””â”€â”€ examples/                          # Usage examples
+    â”œâ”€â”€ simple-deployment/
+    â”œâ”€â”€ microservices/
+    â””â”€â”€ serverless/
 ```
 
 ---
 
-## 💡 Usage Examples
+## ðŸ’¡ Usage Examples
 
 ### Example 1: Deploy Application to Kubernetes
 
@@ -413,7 +413,7 @@ terraform apply -var-file=environments/dev.tfvars -auto-approve
 
 ---
 
-## 🔄 CI/CD Pipelines
+## ðŸ”„ CI/CD Pipelines
 
 ### GitHub Actions Workflow
 
@@ -438,7 +438,7 @@ Multi-stage Jenkins pipeline with:
 
 ---
 
-## 🏗️ Infrastructure as Code
+## ðŸ—ï¸ Infrastructure as Code
 
 ### Terraform Modules
 
@@ -469,7 +469,7 @@ Multi-stage Jenkins pipeline with:
 
 ---
 
-## 📊 Monitoring & Logging
+## ðŸ“Š Monitoring & Logging
 
 ### Prometheus Metrics
 
@@ -499,18 +499,18 @@ ELK Stack configuration for:
 
 ---
 
-## 🔒 Security Best Practices
+## ðŸ”’ Security Best Practices
 
 ### Implemented Security Measures
 
-✅ **Secrets Management**: HashiCorp Vault integration  
-✅ **Image Scanning**: Trivy for container vulnerability scanning  
-✅ **Network Policies**: Kubernetes network policies for pod isolation  
-✅ **RBAC**: Role-based access control for Kubernetes and cloud resources  
-✅ **Encryption**: At-rest and in-transit encryption for all sensitive data  
-✅ **Security Scanning**: Automated SAST/DAST in CI/CD pipeline  
-✅ **Compliance**: CIS benchmark automation and reporting  
-✅ **Audit Logging**: Comprehensive audit trails for all operations
+âœ… **Secrets Management**: HashiCorp Vault integration  
+âœ… **Image Scanning**: Trivy for container vulnerability scanning  
+âœ… **Network Policies**: Kubernetes network policies for pod isolation  
+âœ… **RBAC**: Role-based access control for Kubernetes and cloud resources  
+âœ… **Encryption**: At-rest and in-transit encryption for all sensitive data  
+âœ… **Security Scanning**: Automated SAST/DAST in CI/CD pipeline  
+âœ… **Compliance**: CIS benchmark automation and reporting  
+âœ… **Audit Logging**: Comprehensive audit trails for all operations
 
 ### Security Checklist
 
@@ -527,7 +527,7 @@ Before deploying to production:
 
 ---
 
-## 🤝 Contributing
+## ðŸ¤ Contributing
 
 Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
 
@@ -541,13 +541,13 @@ Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for de
 
 ---
 
-## 📄 License
+## ðŸ“„ License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 📞 Contact
+## ðŸ“ž Contact
 
 **QUOJO DAWSON**
 
@@ -557,7 +557,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## 🙏 Acknowledgments
+## ðŸ™ Acknowledgments
 
 - Thanks to the DevOps community for best practices and tools
 - Inspired by real-world production environments
@@ -565,12 +565,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## ⭐ Star History
+## â­ Star History
 
-If you find this repository helpful, please consider giving it a star! ⭐
+If you find this repository helpful, please consider giving it a star! â­
 
 [![Star History Chart](https://api.star-history.com/svg?repos=QUOJO-DAWSON/devops-practise&type=Date)](https://star-history.com/#QUOJO-DAWSON/devops-practise&Date)
 
 ---
 
-**Made with ❤️ by QUOJO DAWSON | DevOps Engineer**
+**Made with â¤ï¸ by QUOJO DAWSON | DevOps Engineer**
+
