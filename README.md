@@ -1,579 +1,163 @@
-﻿# ðŸš€ DevOps Practice Repository
+﻿# DevOps Practice Repository
 
-![DevOps](https://img.shields.io/badge/DevOps-Practice-blue?style=for-the-badge)
-![Shell Script](https://img.shields.io/badge/shell_script-%23121011.svg?style=for-the-badge&logo=gnu-bash&logoColor=white)
-![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
-![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white)
-![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
-![Terraform](https://img.shields.io/badge/terraform-%235835CC.svg?style=for-the-badge&logo=terraform&logoColor=white)
-![Ansible](https://img.shields.io/badge/ansible-%231A1918.svg?style=for-the-badge&logo=ansible&logoColor=white)
-![Jenkins](https://img.shields.io/badge/jenkins-%232C5263.svg?style=for-the-badge&logo=jenkins&logoColor=white)
+## Status
 
-> **A comprehensive collection of production-ready DevOps automation scripts, CI/CD pipelines, and infrastructure-as-code templates for cloud-native applications.**
+![Terraform](https://img.shields.io/badge/Terraform-1.14+-623CE4?logo=terraform&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-Free_Tier-FF9900?logo=amazon-aws&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-18.x-339933?logo=node.js&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-blue.svg)
+![Cost](https://img.shields.io/badge/Cost-%240%2Fmonth-success)
 
----
+## Quick Links
 
-## ðŸ“‹ Table of Contents
-
-- [Overview](#overview)
-- [Features](#features)
-- [Architecture](#architecture)
-- [Prerequisites](#prerequisites)
-- [Quick Start](#quick-start)
-- [Project Structure](#project-structure)
-- [Usage Examples](#usage-examples)
-- [CI/CD Pipelines](#cicd-pipelines)
-- [Infrastructure as Code](#infrastructure-as-code)
-- [Monitoring & Logging](#monitoring--logging)
-- [Security Best Practices](#security-best-practices)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
+- [Architecture Documentation](ARCHITECTURE.md)
+- [Disaster Recovery Plan](DISASTER-RECOVERY.md)
+- [Performance Optimization](PERFORMANCE.md)
+- [Cost Analysis](COST-OPTIMIZATION.md)
+- [Development Notes](DEVELOPMENT.md)
+- [API Tests](aws-free-tier/tests/)
 
 ---
 
-## ðŸŽ¯ Overview
+## What This Is
 
-This repository demonstrates real-world DevOps practices and automation techniques used in production environments. It includes:
+A production-ready serverless infrastructure built on AWS, demonstrating practical DevOps skills I've developed. Everything is deployed using Terraform and currently runs at zero cost within the AWS Free Tier.
 
-- **Automated deployment scripts** for multiple cloud providers
-- **CI/CD pipeline configurations** for Jenkins, GitHub Actions, and GitLab
-- **Infrastructure as Code** templates using Terraform and Ansible
-- **Container orchestration** with Docker and Kubernetes
-- **Monitoring and alerting** setup with Prometheus and Grafana
-- **Security scanning** and compliance automation
+**Live site:** https://d2z0w8iz0rhvdj.cloudfront.net
 
-### ðŸ’¼ Business Value
+## The Stack
 
-- **Reduces deployment time** by 70% through automation
-- **Minimizes human error** with standardized processes
-- **Ensures consistency** across development, staging, and production
-- **Improves security** with automated scanning and compliance checks
-- **Enables rapid scaling** with infrastructure as code
+I built this using entirely serverless AWS services:
 
----
+**Frontend**
+- S3 for static website hosting
+- CloudFront as a global CDN
 
-## âœ¨ Features
+**Backend**
+- Lambda functions (Node.js 18)
+- API Gateway for the REST API
+- DynamoDB for data persistence
 
-### ðŸ”„ CI/CD Automation
-- âœ… Multi-stage pipeline configurations
-- âœ… Automated testing and code quality checks
-- âœ… Container image building and scanning
-- âœ… Blue-green and canary deployment strategies
-- âœ… Automated rollback mechanisms
+**Operations**
+- CloudWatch for monitoring and alerts
+- AWS Budgets to track costs
 
-### â˜ï¸ Cloud Infrastructure
-- âœ… AWS resource provisioning with Terraform
-- âœ… Azure infrastructure automation
-- âœ… Multi-cloud deployment strategies
-- âœ… Auto-scaling configurations
-- âœ… Cost optimization scripts
+Everything is defined in Terraform - about 500 lines of code that can rebuild the entire infrastructure from scratch in around 5 minutes.
 
-### ðŸ³ Containerization
-- âœ… Optimized Dockerfiles with multi-stage builds
-- âœ… Docker Compose for local development
-- âœ… Kubernetes manifests and Helm charts
-- âœ… Service mesh integration (Istio)
-- âœ… Container security scanning
+## Why Serverless?
 
-### ðŸ“Š Monitoring & Observability
-- âœ… Prometheus metric collection
-- âœ… Grafana dashboard configurations
-- âœ… ELK stack setup for log aggregation
-- âœ… Custom alerting rules
-- âœ… Distributed tracing with Jaeger
+I chose a serverless architecture for a few practical reasons. First, cost - this runs at \/month now and should cost around \.65/month even after Free Tier expires. Compare that to \+/month for traditional EC2 and RDS setups. Second, I wanted zero operational overhead. No servers to patch, no capacity planning, no worrying about scaling. Third, it's what I'd actually recommend for this type of workload in a real job.
 
-### ðŸ”’ Security
-- âœ… Secrets management with Vault
-- âœ… SAST/DAST integration
-- âœ… Container vulnerability scanning
-- âœ… Network policies and firewall rules
-- âœ… Compliance automation (CIS benchmarks)
+## What I Learned
 
----
+**Cold starts were frustrating.** My Lambda function was taking 400ms to wake up because I was loading the entire AWS SDK v2 bundle (50MB). I profiled it, switched to SDK v3 with tree-shaking, and cut the bundle down to 3MB. Cold starts dropped to 200ms.
 
-## ðŸ—ï¸ Architecture
+**CORS is trickier than it looks.** The browser kept blocking my API calls even though everything seemed configured right. Spent time reading the AWS docs and Stack Overflow to understand preflight OPTIONS requests and proper header configuration.
 
-```
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚                         Developer                            â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-                  â”‚
-                  â–¼
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚                    Version Control (GitHub)                  â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-                  â”‚
-                  â–¼
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚              CI/CD Pipeline (Jenkins/GitHub Actions)         â”‚
-â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”   â”‚
-â”‚  â”‚   Build  â”‚â†’ â”‚   Test   â”‚â†’ â”‚  Scan    â”‚â†’ â”‚  Deploy  â”‚   â”‚
-â”‚  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜   â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-                  â”‚
-                  â–¼
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚        Container Registry (ECR/Docker Hub/ACR)              â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-                  â”‚
-                  â–¼
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚           Kubernetes Cluster (EKS/AKS/GKE)                  â”‚
-â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”                  â”‚
-â”‚  â”‚   Dev    â”‚  â”‚  Staging â”‚  â”‚   Prod   â”‚                  â”‚
-â”‚  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜                  â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-                  â”‚
-                  â–¼
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚              Monitoring & Logging                            â”‚
-â”‚  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”                  â”‚
-â”‚  â”‚Prometheusâ”‚  â”‚ Grafana  â”‚  â”‚   ELK    â”‚                  â”‚
-â”‚  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜                  â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-```
+**Infrastructure as Code is powerful.** Being able to version control infrastructure just like application code makes a huge difference. I can review changes, roll back mistakes, and rebuild everything from scratch if needed.
 
----
+**Documentation matters more than I thought.** I spent nearly as much time writing docs as writing code. But now anyone (including future me) can understand the architecture, recover from failures, and know why I made certain decisions.
 
-## ðŸ“¦ Prerequisites
+## The Cost Story
 
-### Required Tools
-- **Docker** >= 20.10
-- **Kubernetes** >= 1.24 (kubectl, minikube for local)
-- **Terraform** >= 1.5.0
-- **Ansible** >= 2.14
-- **AWS CLI** >= 2.x (for AWS deployments)
-- **Azure CLI** >= 2.x (for Azure deployments)
-- **Helm** >= 3.x
-- **Git** >= 2.x
+One thing I'm proud of is the cost efficiency. Here's how it breaks down:
 
-### Recommended Knowledge
-- Linux/Unix command line
-- Shell scripting (Bash)
-- Container concepts
-- Cloud platform basics
-- Infrastructure as Code principles
+**Current (Free Tier):** \.00/month  
+**After Free Tier:** \.65/month  
+**Traditional EC2/RDS equivalent:** \/month  
+**Savings:** 97%
 
----
+I documented the entire cost analysis in [COST-OPTIMIZATION.md](COST-OPTIMIZATION.md) including budget alerts and what to do if costs spike unexpectedly.
 
-## ðŸš€ Quick Start
+## Monitoring & Reliability
 
-### 1. Clone the Repository
-```bash
-git clone https://github.com/QUOJO-DAWSON/devops-practise.git
-cd devops-practise
-```
+The infrastructure includes CloudWatch alarms that email me if:
+- Error rates exceed 5%
+- API latency hits 1000ms
+- Lambda functions get throttled
 
-### 2. Set Up Environment Variables
-```bash
-cp .env.example .env
-# Edit .env with your configurations
-nano .env
-```
+DynamoDB has point-in-time recovery enabled so I can restore to any second in the last 35 days. S3 has versioning turned on. Everything critical is documented in the disaster recovery plan.
 
-### 3. Run Pre-checks
-```bash
-# Check all required tools are installed
-./scripts/setup/check-prerequisites.sh
+## Project Structure
 
-# Set up local development environment
-./scripts/setup/setup-local-env.sh
-```
-
-### 4. Deploy a Sample Application
-```bash
-# Deploy to local Kubernetes cluster
-./scripts/deployment/deploy-local.sh
-
-# Or deploy to AWS
-./scripts/deployment/deploy-aws.sh --environment dev
-```
-
-### 5. Access Monitoring Dashboards
-```bash
-# Port-forward Grafana
-kubectl port-forward svc/grafana 3000:3000 -n monitoring
-
-# Access at http://localhost:3000 (admin/admin)
-```
-
----
-
-## ðŸ“ Project Structure
-
-```
+\\\
 devops-practise/
-â”œâ”€â”€ README.md                          # This file
-â”œâ”€â”€ CONTRIBUTING.md                    # Contribution guidelines
-â”œâ”€â”€ LICENSE                            # MIT License
-â”œâ”€â”€ .gitignore                         # Git ignore rules
-â”œâ”€â”€ .env.example                       # Environment variables template
-â”‚
-â”œâ”€â”€ docs/                              # Documentation
-â”‚   â”œâ”€â”€ architecture.md                # System architecture details
-â”‚   â”œâ”€â”€ best-practices.md              # DevOps best practices
-â”‚   â”œâ”€â”€ troubleshooting.md             # Common issues and solutions
-â”‚   â””â”€â”€ api-reference.md               # Script API documentation
-â”‚
-â”œâ”€â”€ scripts/                           # Automation scripts
-â”‚   â”œâ”€â”€ setup/                         # Initial setup scripts
-â”‚   â”‚   â”œâ”€â”€ check-prerequisites.sh     # Check required tools
-â”‚   â”‚   â”œâ”€â”€ setup-local-env.sh         # Local environment setup
-â”‚   â”‚   â””â”€â”€ install-tools.sh           # Install DevOps tools
-â”‚   â”‚
-â”‚   â”œâ”€â”€ deployment/                    # Deployment automation
-â”‚   â”‚   â”œâ”€â”€ deploy-local.sh            # Local deployment
-â”‚   â”‚   â”œâ”€â”€ deploy-aws.sh              # AWS deployment
-â”‚   â”‚   â”œâ”€â”€ deploy-azure.sh            # Azure deployment
-â”‚   â”‚   â”œâ”€â”€ rollback.sh                # Automated rollback
-â”‚   â”‚   â””â”€â”€ blue-green-deploy.sh       # Blue-green deployment
-â”‚   â”‚
-â”‚   â”œâ”€â”€ monitoring/                    # Monitoring setup
-â”‚   â”‚   â”œâ”€â”€ setup-prometheus.sh        # Prometheus installation
-â”‚   â”‚   â”œâ”€â”€ setup-grafana.sh           # Grafana setup
-â”‚   â”‚   â”œâ”€â”€ configure-alerts.sh        # Alert configuration
-â”‚   â”‚   â””â”€â”€ health-check.sh            # Health monitoring
-â”‚   â”‚
-â”‚   â”œâ”€â”€ automation/                    # General automation
-â”‚   â”‚   â”œâ”€â”€ backup.sh                  # Backup automation
-â”‚   â”‚   â”œâ”€â”€ cleanup.sh                 # Resource cleanup
-â”‚   â”‚   â”œâ”€â”€ scale.sh                   # Auto-scaling
-â”‚   â”‚   â””â”€â”€ cost-optimizer.sh          # Cost optimization
-â”‚   â”‚
-â”‚   â””â”€â”€ security/                      # Security scripts
-â”‚       â”œâ”€â”€ scan-vulnerabilities.sh    # Vulnerability scanning
-â”‚       â”œâ”€â”€ rotate-secrets.sh          # Secret rotation
-â”‚       â”œâ”€â”€ audit-compliance.sh        # Compliance checking
-â”‚       â””â”€â”€ harden-system.sh           # System hardening
-â”‚
-â”œâ”€â”€ ci-cd/                             # CI/CD configurations
-â”‚   â”œâ”€â”€ jenkins/                       # Jenkins pipelines
-â”‚   â”‚   â”œâ”€â”€ Jenkinsfile                # Main pipeline
-â”‚   â”‚   â”œâ”€â”€ Jenkinsfile.build          # Build stage
-â”‚   â”‚   â””â”€â”€ Jenkinsfile.deploy         # Deploy stage
-â”‚   â”‚
-â”‚   â”œâ”€â”€ github-actions/                # GitHub Actions workflows
-â”‚   â”‚   â”œâ”€â”€ ci.yml                     # Continuous Integration
-â”‚   â”‚   â”œâ”€â”€ cd.yml                     # Continuous Deployment
-â”‚   â”‚   â”œâ”€â”€ security-scan.yml          # Security scanning
-â”‚   â”‚   â””â”€â”€ terraform-plan.yml         # Infrastructure preview
-â”‚   â”‚
-â”‚   â””â”€â”€ gitlab-ci/                     # GitLab CI/CD
-â”‚       â””â”€â”€ .gitlab-ci.yml             # GitLab pipeline
-â”‚
-â”œâ”€â”€ infrastructure/                    # Infrastructure as Code
-â”‚   â”œâ”€â”€ terraform/                     # Terraform configurations
-â”‚   â”‚   â”œâ”€â”€ aws/                       # AWS resources
-â”‚   â”‚   â”‚   â”œâ”€â”€ main.tf
-â”‚   â”‚   â”‚   â”œâ”€â”€ variables.tf
-â”‚   â”‚   â”‚   â”œâ”€â”€ outputs.tf
-â”‚   â”‚   â”‚   â””â”€â”€ modules/
-â”‚   â”‚   â”‚       â”œâ”€â”€ vpc/
-â”‚   â”‚   â”‚       â”œâ”€â”€ eks/
-â”‚   â”‚   â”‚       â””â”€â”€ rds/
-â”‚   â”‚   â”‚
-â”‚   â”‚   â””â”€â”€ azure/                     # Azure resources
-â”‚   â”‚       â”œâ”€â”€ main.tf
-â”‚   â”‚       â””â”€â”€ modules/
-â”‚   â”‚
-â”‚   â”œâ”€â”€ ansible/                       # Ansible playbooks
-â”‚   â”‚   â”œâ”€â”€ playbooks/
-â”‚   â”‚   â”‚   â”œâ”€â”€ install-docker.yml
-â”‚   â”‚   â”‚   â”œâ”€â”€ setup-k8s.yml
-â”‚   â”‚   â”‚   â””â”€â”€ configure-monitoring.yml
-â”‚   â”‚   â”‚
-â”‚   â”‚   â””â”€â”€ roles/                     # Ansible roles
-â”‚   â”‚       â”œâ”€â”€ common/
-â”‚   â”‚       â”œâ”€â”€ docker/
-â”‚   â”‚       â””â”€â”€ kubernetes/
-â”‚   â”‚
-â”‚   â””â”€â”€ kubernetes/                    # Kubernetes manifests
-â”‚       â”œâ”€â”€ base/                      # Base configurations
-â”‚       â”‚   â”œâ”€â”€ namespace.yaml
-â”‚       â”‚   â”œâ”€â”€ deployment.yaml
-â”‚       â”‚   â”œâ”€â”€ service.yaml
-â”‚       â”‚   â””â”€â”€ ingress.yaml
-â”‚       â”‚
-â”‚       â”œâ”€â”€ overlays/                  # Environment-specific
-â”‚       â”‚   â”œâ”€â”€ dev/
-â”‚       â”‚   â”œâ”€â”€ staging/
-â”‚       â”‚   â””â”€â”€ production/
-â”‚       â”‚
-â”‚       â””â”€â”€ helm/                      # Helm charts
-â”‚           â””â”€â”€ app-chart/
-â”‚               â”œâ”€â”€ Chart.yaml
-â”‚               â”œâ”€â”€ values.yaml
-â”‚               â””â”€â”€ templates/
-â”‚
-â”œâ”€â”€ monitoring/                        # Monitoring configurations
-â”‚   â”œâ”€â”€ prometheus/
-â”‚   â”‚   â”œâ”€â”€ prometheus.yml
-â”‚   â”‚   â”œâ”€â”€ alert-rules.yml
-â”‚   â”‚   â””â”€â”€ recording-rules.yml
-â”‚   â”‚
-â”‚   â”œâ”€â”€ grafana/
-â”‚   â”‚   â”œâ”€â”€ dashboards/
-â”‚   â”‚   â”‚   â”œâ”€â”€ application.json
-â”‚   â”‚   â”‚   â”œâ”€â”€ infrastructure.json
-â”‚   â”‚   â”‚   â””â”€â”€ kubernetes.json
-â”‚   â”‚   â””â”€â”€ datasources.yml
-â”‚   â”‚
-â”‚   â””â”€â”€ elk/
-â”‚       â”œâ”€â”€ logstash.conf
-â”‚       â”œâ”€â”€ elasticsearch.yml
-â”‚       â””â”€â”€ kibana.yml
-â”‚
-â”œâ”€â”€ docker/                            # Docker configurations
-â”‚   â”œâ”€â”€ Dockerfile                     # Main application
-â”‚   â”œâ”€â”€ Dockerfile.nginx               # Nginx
-â”‚   â”œâ”€â”€ docker-compose.yml             # Local stack
-â”‚   â””â”€â”€ docker-compose.prod.yml        # Production stack
-â”‚
-â”œâ”€â”€ tests/                             # Test scripts
-â”‚   â”œâ”€â”€ unit/
-â”‚   â”œâ”€â”€ integration/
-â”‚   â””â”€â”€ e2e/
-â”‚
-â””â”€â”€ examples/                          # Usage examples
-    â”œâ”€â”€ simple-deployment/
-    â”œâ”€â”€ microservices/
-    â””â”€â”€ serverless/
-```
+ aws-free-tier/
+    terraform/              # All infrastructure code
+       main.tf
+       cloudwatch-alarms.tf
+       security.tf
+       cost-monitoring.tf
+    lambda/                 # Serverless functions
+       index.js
+    website/                # Static site
+       index.html
+    tests/                  # Integration tests
+        api-tests.js
+        README.md
+ ARCHITECTURE.md             # How everything works
+ DISASTER-RECOVERY.md        # What to do when things break
+ PERFORMANCE.md              # Cold start optimizations
+ COST-OPTIMIZATION.md        # Cost analysis and budgets
+ DEVELOPMENT.md              # Development approach
+\\\
 
----
+## Getting Started
 
-## ðŸ’¡ Usage Examples
+If you want to deploy this yourself:
 
-### Example 1: Deploy Application to Kubernetes
-
-```bash
-# Deploy to development environment
-./scripts/deployment/deploy-local.sh --namespace dev --app myapp
-
-# Deploy to production with health checks
-./scripts/deployment/deploy-aws.sh \
-  --environment production \
-  --app myapp \
-  --health-check true \
-  --replicas 3
-```
-
-### Example 2: Set Up Monitoring Stack
-
-```bash
-# Install Prometheus and Grafana
-./scripts/monitoring/setup-prometheus.sh
-./scripts/monitoring/setup-grafana.sh
-
-# Configure custom alerts
-./scripts/monitoring/configure-alerts.sh \
-  --alert-name high-cpu \
-  --threshold 80 \
-  --slack-webhook $SLACK_WEBHOOK_URL
-```
-
-### Example 3: Infrastructure Provisioning
-
-```bash
-# Initialize Terraform
-cd infrastructure/terraform/aws
+\\\ash
+# Deploy infrastructure
+cd aws-free-tier/terraform
 terraform init
+terraform apply
 
-# Plan infrastructure changes
-terraform plan -var-file=environments/dev.tfvars
+# Run tests
+cd ../tests
+node api-tests.js
+\\\
 
-# Apply changes
-terraform apply -var-file=environments/dev.tfvars -auto-approve
-```
+You'll need AWS CLI configured and Terraform installed.
 
-### Example 4: Automated Backup
+## The Numbers
 
-```bash
-# Backup databases and configurations
-./scripts/automation/backup.sh \
-  --type full \
-  --destination s3://my-backups/$(date +%Y%m%d) \
-  --retention-days 30
-```
+- **AWS Services:** 6 (S3, CloudFront, Lambda, API Gateway, DynamoDB, CloudWatch)
+- **Infrastructure Code:** 500+ lines of Terraform
+- **Documentation:** 2000+ lines across 5 major docs
+- **Current Cost:** \.00/month
+- **Performance:** <200ms cold start, <50ms warm requests
 
-### Example 5: Security Scanning
+## Technologies
 
-```bash
-# Scan Docker images for vulnerabilities
-./scripts/security/scan-vulnerabilities.sh \
-  --image myapp:latest \
-  --severity HIGH,CRITICAL
+**Cloud:** AWS  
+**IaC:** Terraform  
+**Runtime:** Node.js 18.x  
+**Database:** DynamoDB  
+**CI/CD:** GitHub Actions  
+**Monitoring:** CloudWatch  
 
-# Run compliance audit
-./scripts/security/audit-compliance.sh \
-  --framework CIS \
-  --output-format json
-```
+## Documentation
 
----
+I've documented everything pretty thoroughly:
 
-## ðŸ”„ CI/CD Pipelines
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - How all the pieces fit together
+- **[DEVELOPMENT.md](DEVELOPMENT.md)** - My iterative development approach
+- **[PERFORMANCE.md](PERFORMANCE.md)** - Cold start optimization work
+- **[DISASTER-RECOVERY.md](DISASTER-RECOVERY.md)** - Recovery procedures for 6 failure scenarios
+- **[COST-OPTIMIZATION.md](COST-OPTIMIZATION.md)** - Complete cost breakdown and monitoring
 
-### GitHub Actions Workflow
+## License
 
-The repository includes automated CI/CD workflows that:
+MIT License - see [LICENSE](LICENSE) file.
 
-1. **Build & Test**: Compile code, run unit tests, and generate coverage reports
-2. **Security Scan**: Check for vulnerabilities in dependencies and containers
-3. **Infrastructure Validation**: Validate Terraform and Kubernetes manifests
-4. **Deploy**: Automated deployment to development/staging/production
-5. **Monitoring**: Integration with monitoring tools for deployment verification
+## Contact
 
-**Workflow Trigger**: Push to `main`, `develop`, or pull requests
-
-### Jenkins Pipeline
-
-Multi-stage Jenkins pipeline with:
-- Parallel test execution
-- Docker image building with layer caching
-- Quality gates with SonarQube
-- Approval gates for production
-- Automated rollback on failure
-
----
-
-## ðŸ—ï¸ Infrastructure as Code
-
-### Terraform Modules
-
-**AWS Infrastructure**:
-- VPC with public/private subnets
-- EKS cluster with managed node groups
-- RDS database with automated backups
-- Application Load Balancer
-- S3 buckets with versioning and encryption
-- CloudWatch logging and monitoring
-
-**Azure Infrastructure**:
-- Virtual Network and subnets
-- AKS cluster
-- Azure Database
-- Application Gateway
-- Storage accounts
-- Azure Monitor
-
-### Ansible Automation
-
-**Server Configuration**:
-- Docker installation and configuration
-- Kubernetes cluster setup
-- Security hardening (firewall, SSH, fail2ban)
-- Application deployment
-- Monitoring agent installation
-
----
-
-## ðŸ“Š Monitoring & Logging
-
-### Prometheus Metrics
-
-Custom metrics collected:
-- Application response time
-- Request rate and error rate
-- Resource utilization (CPU, memory, disk)
-- Database connection pool status
-- Queue depth and processing time
-
-### Grafana Dashboards
-
-Pre-configured dashboards for:
-- **Application Performance**: Request rates, latencies, error rates
-- **Infrastructure Health**: Node status, pod health, resource usage
-- **Database Monitoring**: Query performance, connection pools, locks
-- **Business Metrics**: User activity, transaction volume
-
-### Log Aggregation
-
-ELK Stack configuration for:
-- Centralized log collection from all services
-- Real-time log analysis
-- Custom log patterns and parsing
-- Alert triggers based on log patterns
-- Long-term log retention with S3 archival
-
----
-
-## ðŸ”’ Security Best Practices
-
-### Implemented Security Measures
-
-âœ… **Secrets Management**: HashiCorp Vault integration  
-âœ… **Image Scanning**: Trivy for container vulnerability scanning  
-âœ… **Network Policies**: Kubernetes network policies for pod isolation  
-âœ… **RBAC**: Role-based access control for Kubernetes and cloud resources  
-âœ… **Encryption**: At-rest and in-transit encryption for all sensitive data  
-âœ… **Security Scanning**: Automated SAST/DAST in CI/CD pipeline  
-âœ… **Compliance**: CIS benchmark automation and reporting  
-âœ… **Audit Logging**: Comprehensive audit trails for all operations
-
-### Security Checklist
-
-Before deploying to production:
-
-- [ ] All secrets stored in vault/secrets manager
-- [ ] Container images scanned and approved
-- [ ] Network policies configured
-- [ ] RBAC policies reviewed and applied
-- [ ] Encryption enabled for data at rest
-- [ ] TLS/SSL configured for all endpoints
-- [ ] Backup and disaster recovery tested
-- [ ] Security monitoring and alerting enabled
-
----
-
-## ðŸ¤ Contributing
-
-Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
-
-### How to Contribute
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
----
-
-## ðŸ“„ License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## ðŸ“ž Contact
-
-**QUOJO DAWSON**
+**George Dawson-Kesson**
 
 - GitHub: [@QUOJO-DAWSON](https://github.com/QUOJO-DAWSON)
-- LinkedIn: [[George Dawson-Kesson](https://www.linkedin.com/in/gdawsonkesson)](https://linkedin.com/in/yourprofile)
+- LinkedIn: [linkedin.com/in/gdawsonkesson](https://www.linkedin.com/in/gdawsonkesson)
 - Email: dawsonkessongp@gmail.com
 
 ---
 
-## ðŸ™ Acknowledgments
-
-- Thanks to the DevOps community for best practices and tools
-- Inspired by real-world production environments
-- Built with enterprise-grade reliability in mind
-
----
-
-## â­ Star History
-
-If you find this repository helpful, please consider giving it a star! â­
-
-[![Star History Chart](https://api.star-history.com/svg?repos=QUOJO-DAWSON/devops-practise&type=Date)](https://star-history.com/#QUOJO-DAWSON/devops-practise&Date)
-
----
-
-**Made with â¤ï¸ by QUOJO DAWSON | DevOps Engineer**
-
-
-
+Built in Hamilton, Ohio. AWS Certified Solutions Architect - Associate.
