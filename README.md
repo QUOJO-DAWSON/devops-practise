@@ -552,8 +552,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **QUOJO DAWSON**
 
 - GitHub: [@QUOJO-DAWSON](https://github.com/QUOJO-DAWSON)
-- LinkedIn: [Connect with me](https://linkedin.com/in/yourprofile)
-- Email: your.email@example.com
+- LinkedIn: [[George Dawson-Kesson](https://www.linkedin.com/in/gdawsonkesson)](https://linkedin.com/in/yourprofile)
+- Email: dawsonkessongp@gmail.com
 
 ---
 
@@ -574,4 +574,5 @@ If you find this repository helpful, please consider giving it a star! â­
 ---
 
 **Made with â¤ï¸ by QUOJO DAWSON | DevOps Engineer**
+
 
