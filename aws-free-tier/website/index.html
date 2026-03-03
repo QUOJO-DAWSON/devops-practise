@@ -51,7 +51,6 @@
         overflow-x: hidden;
       }
 
-      /* subtle animated background glow */
       body::before {
         content: "";
         position: fixed;
@@ -89,7 +88,6 @@
         padding: 18px;
       }
 
-      /* sticky top nav */
       .topbar {
         position: sticky;
         top: 10px;
@@ -312,7 +310,6 @@
         margin-top: 12px;
       }
 
-      /* Contact Card */
       .contact-card {
         background: linear-gradient(135deg, #ffffff 0%, #f7f9ff 100%);
         border: 1px solid rgba(102, 126, 234, 0.18);
@@ -429,7 +426,6 @@
         font-size: 0.9rem;
       }
 
-      /* toast */
       .toast {
         position: fixed;
         bottom: 18px;
@@ -451,7 +447,6 @@
         transform: translateX(-50%) translateY(-4px);
       }
 
-      /* reveal on scroll */
       .reveal {
         opacity: 0;
         transform: translateY(14px);
@@ -463,7 +458,6 @@
         transform: translateY(0);
       }
 
-      /* back to top */
       .backtop {
         position: fixed;
         right: 18px;
@@ -523,23 +517,9 @@
         </p>
 
         <div class="cta-row" aria-label="Call to action buttons">
-          <a class="btn primary" href="mailto:dawsonkessongp@gmail.com"
-            >✉️ Email Me</a
-          >
-          <a
-            class="btn"
-            href="https://github.com/QUOJO-DAWSON"
-            target="_blank"
-            rel="noreferrer"
-            >💻 GitHub</a
-          >
-          <a
-            class="btn"
-            href="https://www.linkedin.com/in/gdawsonkesson"
-            target="_blank"
-            rel="noreferrer"
-            >🔗 LinkedIn</a
-          >
+          <a class="btn primary" href="mailto:dawsonkessongp@gmail.com">✉️ Email Me</a>
+          <a class="btn" href="https://github.com/QUOJO-DAWSON" target="_blank" rel="noreferrer">💻 GitHub</a>
+          <a class="btn" href="https://www.linkedin.com/in/gdawsonkesson" target="_blank" rel="noreferrer">🔗 LinkedIn</a>
           <a class="btn" href="tel:+15132664741">📞 Call</a>
         </div>
       </header>
@@ -562,10 +542,7 @@
           <div class="skills-grid">
             <div class="skill-card">
               <h3>☁️ Cloud Platforms</h3>
-              <p>
-                AWS (Associate Certified)<br />Infrastructure Design<br />Cost
-                Optimization
-              </p>
+              <p>AWS (Associate Certified)<br />Infrastructure Design<br />Cost Optimization</p>
             </div>
 
             <div class="skill-card">
@@ -655,25 +632,17 @@
                 <div class="contact-item">
                   <div class="contact-left">
                     <div class="contact-label">EMAIL</div>
-                    <div class="contact-value" id="emailVal">
-                      dawsonkessongp@gmail.com
-                    </div>
+                    <div class="contact-value" id="emailVal">dawsonkessongp@gmail.com</div>
                   </div>
-                  <button class="copy-btn" data-copy="dawsonkessongp@gmail.com">
-                    Copy
-                  </button>
+                  <button class="copy-btn" data-copy="dawsonkessongp@gmail.com">Copy</button>
                 </div>
 
                 <div class="contact-item">
                   <div class="contact-left">
                     <div class="contact-label">PHONE</div>
-                    <div class="contact-value" id="phoneVal">
-                      (513) 266-4741
-                    </div>
+                    <div class="contact-value" id="phoneVal">(513) 266-4741</div>
                   </div>
-                  <button class="copy-btn" data-copy="5132664741">
-                    Copy
-                  </button>
+                  <button class="copy-btn" data-copy="5132664741">Copy</button>
                 </div>
 
                 <div class="contact-item">
@@ -681,34 +650,15 @@
                     <div class="contact-label">LOCATION</div>
                     <div class="contact-value">Cincinnati, OH</div>
                   </div>
-                  <a class="copy-btn" style="text-decoration: none" href="#top"
-                    >Top</a
-                  >
+                  <a class="copy-btn" style="text-decoration: none" href="#top">Top</a>
                 </div>
               </div>
             </div>
 
             <div class="link-grid" aria-label="Profile links">
-              <a
-                class="link-btn"
-                href="mailto:dawsonkessongp@gmail.com"
-                rel="noreferrer"
-                >Email <span>↗</span></a
-              >
-              <a
-                class="link-btn"
-                href="https://github.com/QUOJO-DAWSON"
-                target="_blank"
-                rel="noreferrer"
-                >GitHub <span>↗</span></a
-              >
-              <a
-                class="link-btn"
-                href="https://www.linkedin.com/in/gdawsonkesson"
-                target="_blank"
-                rel="noreferrer"
-                >LinkedIn <span>↗</span></a
-              >
+              <a class="link-btn" href="mailto:dawsonkessongp@gmail.com" rel="noreferrer">Email <span>↗</span></a>
+              <a class="link-btn" href="https://github.com/QUOJO-DAWSON" target="_blank" rel="noreferrer">GitHub <span>↗</span></a>
+              <a class="link-btn" href="https://www.linkedin.com/in/gdawsonkesson" target="_blank" rel="noreferrer">LinkedIn <span>↗</span></a>
               <a class="link-btn" href="tel:+15132664741">Call <span>↗</span></a>
             </div>
           </div>
@@ -742,7 +692,6 @@
     <button class="backtop" id="backTop" aria-label="Back to top">↑</button>
 
     <script>
-      // 1) Typing effect (static site, dynamic feel)
       (function () {
         const el = document.getElementById("typingText");
         const phrases = [
@@ -779,7 +728,6 @@
         tick();
       })();
 
-      // 2) Reveal on scroll
       (function () {
         const items = document.querySelectorAll(".reveal");
         const io = new IntersectionObserver(
@@ -793,7 +741,6 @@
         items.forEach((x) => io.observe(x));
       })();
 
-      // 3) Copy-to-clipboard + toast
       (function () {
         const toast = document.getElementById("toast");
         function showToast(msg) {
@@ -809,7 +756,6 @@
               await navigator.clipboard.writeText(val);
               showToast("Copied ✅");
             } catch (e) {
-              // fallback
               const ta = document.createElement("textarea");
               ta.value = val;
               document.body.appendChild(ta);
@@ -822,7 +768,6 @@
         });
       })();
 
-      // 4) Back-to-top
       (function () {
         const btn = document.getElementById("backTop");
         window.addEventListener("scroll", () => {
@@ -834,7 +779,6 @@
         );
       })();
 
-      // 5) Visitor counter fetch (your existing API)
       async function updateVisitorCount() {
         try {
           const API_ENDPOINT =

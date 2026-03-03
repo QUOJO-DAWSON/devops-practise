@@ -1,38 +1,30 @@
-# ============================================
-# Terraform Variables
-# ============================================
-
 variable "aws_region" {
-  description = "AWS region for resources"
+  description = "AWS region"
   type        = string
-  default     = "us-east-2" # Ohio
-}
-
-variable "project_name" {
-  description = "Project name prefix for resources"
-  type        = string
-  default     = "montero-devops"
+  default     = "us-east-2"
 }
 
 variable "environment" {
   description = "Environment name"
   type        = string
   default     = "production"
-
-  validation {
-    condition     = contains(["development", "staging", "production"], var.environment)
-    error_message = "Environment must be development, staging, or production."
-  }
 }
 
-variable "enable_cloudfront" {
-  description = "Enable CloudFront CDN for website"
-  type        = bool
-  default     = true
+variable "project_name" {
+  description = "Project name prefix"
+  type        = string
+  default     = "montero-devops"
 }
 
-variable "enable_monitoring" {
-  description = "Enable CloudWatch monitoring and dashboards"
+# Cost monitoring is optional and OFF by default for $0 target
+variable "enable_cost_monitoring" {
+  description = "Enable AWS Budgets + SNS alerts (OFF by default for $0 deployment)"
   type        = bool
-  default     = true
+  default     = false
+}
+
+variable "budget_alert_email" {
+  description = "Email address to receive budget alerts"
+  type        = string
+  default     = "ufefedawson@gmail.com"
 }

@@ -1,6 +1,8 @@
 # ============================================
 # AWS Free Tier Infrastructure
-# Portfolio Website + Serverless API
+# Portfolio Website (S3 + CloudFront) + Serverless Visitor API
+# Option A: Private S3 (CloudFront OAC only)
+# Region: us-east-2
 # ============================================
 
 terraform {
@@ -11,17 +13,11 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
+    archive = {
+      source  = "hashicorp/archive"
+      version = "~> 2.7"
+    }
   }
-
-  # Backend configuration for state management
-  # Uncomment after creating S3 bucket and DynamoDB table
-  # backend "s3" {
-  #   bucket         = "montero-terraform-state"
-  #   key            = "free-tier/terraform.tfstate"
-  #   region         = "us-east-2"
-  #   dynamodb_table = "terraform-state-lock"
-  #   encrypt        = true
-  # }
 }
 
 provider "aws" {
@@ -45,7 +41,8 @@ provider "aws" {
 data "aws_caller_identity" "current" {}
 
 # ============================================
-# S3 Bucket for Static Website
+# S3 Bucket (PRIVATE)
+# NOTE: Security controls live in security.tf (no duplicates here)
 # ============================================
 
 resource "aws_s3_bucket" "portfolio_website" {
@@ -53,71 +50,53 @@ resource "aws_s3_bucket" "portfolio_website" {
 
   tags = {
     Name = "Portfolio Website"
-    Type = "Static Website"
+    Type = "Static Website via CloudFront"
   }
-}
-
-
-
-resource "aws_s3_bucket_website_configuration" "portfolio_website" {
-  bucket = aws_s3_bucket.portfolio_website.id
-
-  index_document {
-    suffix = "index.html"
-  }
-
-  error_document {
-    key = "error.html"
-  }
-}
-
-resource "aws_s3_bucket_policy" "portfolio_website" {
-  bucket = aws_s3_bucket.portfolio_website.id
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Sid       = "PublicReadGetObject"
-        Effect    = "Allow"
-        Principal = "*"
-        Action    = "s3:GetObject"
-        Resource  = "${aws_s3_bucket.portfolio_website.arn}/*"
-      }
-    ]
-  })
-
-  depends_on = [aws_s3_bucket_public_access_block.portfolio_website]
 }
 
 # ============================================
-# CloudFront Distribution (CDN)
+# CloudFront OAC
 # ============================================
 
-resource "aws_cloudfront_origin_access_identity" "portfolio" {
-  comment = "Portfolio Website OAI"
+resource "aws_cloudfront_origin_access_control" "portfolio_oac" {
+  name                              = "${var.project_name}-portfolio-oac"
+  description                       = "OAC for private S3 access"
+  origin_access_control_origin_type = "s3"
+  signing_behavior                  = "always"
+  signing_protocol                  = "sigv4"
 }
+
+# ============================================
+# CloudFront Distribution
+# IMPORTANT: Keep s3_origin_config but set OriginAccessIdentity to ""
+# This is what actually detaches the old OAI so Terraform can delete it.
+# ============================================
 
 resource "aws_cloudfront_distribution" "portfolio_cdn" {
   enabled             = true
   is_ipv6_enabled     = true
   comment             = "Portfolio Website CDN"
   default_root_object = "index.html"
-  price_class         = "PriceClass_100" # North America and Europe only
+  price_class         = "PriceClass_100"
 
   origin {
-    domain_name = aws_s3_bucket.portfolio_website.bucket_regional_domain_name
-    origin_id   = "S3-Portfolio"
+    domain_name              = aws_s3_bucket.portfolio_website.bucket_regional_domain_name
+    origin_id                = "S3-Portfolio"
+    origin_access_control_id = aws_cloudfront_origin_access_control.portfolio_oac.id
 
     s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.portfolio.cloudfront_access_identity_path
+      origin_access_identity = ""
     }
   }
 
   default_cache_behavior {
-    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
-    cached_methods   = ["GET", "HEAD"]
-    target_origin_id = "S3-Portfolio"
+    target_origin_id       = "S3-Portfolio"
+    viewer_protocol_policy = "redirect-to-https"
+
+    allowed_methods = ["GET", "HEAD", "OPTIONS"]
+    cached_methods  = ["GET", "HEAD"]
+
+    compress = true
 
     forwarded_values {
       query_string = false
@@ -126,11 +105,22 @@ resource "aws_cloudfront_distribution" "portfolio_cdn" {
       }
     }
 
-    viewer_protocol_policy = "redirect-to-https"
-    min_ttl                = 0
-    default_ttl            = 3600
-    max_ttl                = 86400
-    compress               = true
+    min_ttl     = 0
+    default_ttl = 3600
+    max_ttl     = 86400
+  }
+
+  # SPA routing support
+  custom_error_response {
+    error_code         = 403
+    response_code      = 200
+    response_page_path = "/index.html"
+  }
+
+  custom_error_response {
+    error_code         = 404
+    response_code      = 200
+    response_page_path = "/index.html"
   }
 
   restrictions {
@@ -149,12 +139,41 @@ resource "aws_cloudfront_distribution" "portfolio_cdn" {
 }
 
 # ============================================
-# DynamoDB Table
+# Bucket Policy (Allow CloudFront OAC Only)
+# NOTE: NO depends_on here to avoid undeclared reference errors.
+# ============================================
+
+resource "aws_s3_bucket_policy" "portfolio_website" {
+  bucket = aws_s3_bucket.portfolio_website.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid    = "AllowCloudFrontReadOnly"
+        Effect = "Allow"
+        Principal = {
+          Service = "cloudfront.amazonaws.com"
+        }
+        Action   = ["s3:GetObject"]
+        Resource = "${aws_s3_bucket.portfolio_website.arn}/*"
+        Condition = {
+          StringEquals = {
+            "AWS:SourceArn" = "arn:aws:cloudfront::${data.aws_caller_identity.current.account_id}:distribution/${aws_cloudfront_distribution.portfolio_cdn.id}"
+          }
+        }
+      }
+    ]
+  })
+}
+
+# ============================================
+# DynamoDB Table (Visitor Counter)
 # ============================================
 
 resource "aws_dynamodb_table" "visitor_counter" {
   name         = "${var.project_name}-visitor-counter"
-  billing_mode = "PAY_PER_REQUEST" # Free tier eligible
+  billing_mode = "PAY_PER_REQUEST"
   hash_key     = "id"
 
   attribute {
@@ -164,12 +183,11 @@ resource "aws_dynamodb_table" "visitor_counter" {
 
   tags = {
     Name = "Visitor Counter"
-    Type = "Serverless"
   }
 }
 
 # ============================================
-# Lambda Function - Visitor Counter
+# IAM Role for Lambda
 # ============================================
 
 resource "aws_iam_role" "lambda_role" {
@@ -214,6 +232,10 @@ resource "aws_iam_role_policy" "lambda_dynamodb" {
   })
 }
 
+# ============================================
+# Lambda Function
+# ============================================
+
 data "archive_file" "lambda_zip" {
   type        = "zip"
   source_dir  = "${path.module}/../lambda"
@@ -221,14 +243,13 @@ data "archive_file" "lambda_zip" {
 }
 
 resource "aws_lambda_function" "visitor_counter" {
-  filename      = data.archive_file.lambda_zip.output_path
-  function_name = "${var.project_name}-visitor-counter"
-  role          = aws_iam_role.lambda_role.arn
-  handler       = "index.handler"
-  runtime       = "nodejs18.x"
-  timeout       = 10
-  memory_size   = 128
-
+  filename         = data.archive_file.lambda_zip.output_path
+  function_name    = "${var.project_name}-visitor-counter"
+  role             = aws_iam_role.lambda_role.arn
+  handler          = "index.handler"
+  runtime          = "nodejs18.x"
+  timeout          = 10
+  memory_size      = 128
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
 
   environment {
@@ -243,7 +264,7 @@ resource "aws_lambda_function" "visitor_counter" {
 }
 
 # ============================================
-# API Gateway
+# API Gateway HTTP API
 # ============================================
 
 resource "aws_apigatewayv2_api" "visitor_api" {
@@ -255,20 +276,12 @@ resource "aws_apigatewayv2_api" "visitor_api" {
     allow_methods = ["GET", "POST", "OPTIONS"]
     allow_headers = ["*"]
   }
-
-  tags = {
-    Name = "Visitor API"
-  }
 }
 
 resource "aws_apigatewayv2_stage" "visitor_api" {
   api_id      = aws_apigatewayv2_api.visitor_api.id
   name        = "$default"
   auto_deploy = true
-
-  tags = {
-    Name = "Visitor API Stage"
-  }
 }
 
 resource "aws_apigatewayv2_integration" "lambda_integration" {
@@ -294,55 +307,10 @@ resource "aws_lambda_permission" "api_gateway" {
 }
 
 # ============================================
-# CloudWatch Log Groups
+# CloudWatch Logs
 # ============================================
 
 resource "aws_cloudwatch_log_group" "lambda_logs" {
   name              = "/aws/lambda/${aws_lambda_function.visitor_counter.function_name}"
-  retention_in_days = 7 # Free tier: 5GB storage
-
-  tags = {
-    Name = "Lambda Logs"
-  }
-}
-
-# ============================================
-# CloudWatch Dashboard
-# ============================================
-
-resource "aws_cloudwatch_dashboard" "portfolio_dashboard" {
-  dashboard_name = "${var.project_name}-portfolio-dashboard"
-
-  dashboard_body = jsonencode({
-    widgets = [
-      {
-        type = "metric"
-        properties = {
-          metrics = [
-            ["AWS/Lambda", "Invocations", { stat = "Sum", label = "Lambda Invocations" }],
-            [".", "Errors", { stat = "Sum", label = "Lambda Errors" }],
-            [".", "Duration", { stat = "Average", label = "Lambda Duration (ms)" }]
-          ]
-          period = 300
-          stat   = "Average"
-          region = var.aws_region
-          title  = "Lambda Metrics"
-        }
-      },
-      {
-        type = "metric"
-        properties = {
-          metrics = [
-            ["AWS/DynamoDB", "UserErrors", { stat = "Sum" }],
-            [".", "ConsumedReadCapacityUnits", { stat = "Sum" }],
-            [".", "ConsumedWriteCapacityUnits", { stat = "Sum" }]
-          ]
-          period = 300
-          stat   = "Average"
-          region = var.aws_region
-          title  = "DynamoDB Metrics"
-        }
-      }
-    ]
-  })
+  retention_in_days = 7
 }

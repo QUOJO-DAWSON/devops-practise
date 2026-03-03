@@ -1,33 +1,37 @@
-# Cost Monitoring and Budgets
+# ============================================
+# Cost Monitoring and Budgets (Optional)
+# Default: OFF to keep deployment $0 target
+# ============================================
 
-# SNS Topic for Budget Alerts
 resource "aws_sns_topic" "budget_alerts" {
-  name = "${var.project_name}-budget-alerts"
+  count = var.enable_cost_monitoring ? 1 : 0
+  name  = "${var.project_name}-budget-alerts"
 }
 
-# SNS Topic Subscription (Email)
 resource "aws_sns_topic_subscription" "budget_email" {
-  topic_arn = aws_sns_topic.budget_alerts.arn
+  count     = var.enable_cost_monitoring ? 1 : 0
+  topic_arn = aws_sns_topic.budget_alerts[0].arn
   protocol  = "email"
-  endpoint  = "dawsonkessongp@gmail.com"
+  endpoint  = var.budget_alert_email
 }
 
-# Monthly Budget with Alerts
 resource "aws_budgets_budget" "monthly_budget" {
-  name              = "${var.project_name}-monthly-budget"
-  budget_type       = "COST"
-  limit_amount      = "5.00"
-  limit_unit        = "USD"
-  time_unit         = "MONTHLY"
+  count = var.enable_cost_monitoring ? 1 : 0
+
+  name         = "${var.project_name}-monthly-budget"
+  budget_type  = "COST"
+  limit_amount = "5.00"
+  limit_unit   = "USD"
+  time_unit    = "MONTHLY"
+
   time_period_start = "2026-02-01_00:00"
-  time_period_end   = "2087-06-15_00:00"
 
   notification {
     comparison_operator        = "GREATER_THAN"
     threshold                  = 80
     threshold_type             = "PERCENTAGE"
     notification_type          = "ACTUAL"
-    subscriber_email_addresses = ["dawsonkessongp@gmail.com"]
+    subscriber_email_addresses = [var.budget_alert_email]
   }
 
   notification {
@@ -35,7 +39,7 @@ resource "aws_budgets_budget" "monthly_budget" {
     threshold                  = 100
     threshold_type             = "PERCENTAGE"
     notification_type          = "ACTUAL"
-    subscriber_email_addresses = ["dawsonkessongp@gmail.com"]
+    subscriber_email_addresses = [var.budget_alert_email]
   }
 
   notification {
@@ -43,7 +47,7 @@ resource "aws_budgets_budget" "monthly_budget" {
     threshold                  = 100
     threshold_type             = "PERCENTAGE"
     notification_type          = "FORECASTED"
-    subscriber_email_addresses = ["dawsonkessongp@gmail.com"]
+    subscriber_email_addresses = [var.budget_alert_email]
   }
 
   cost_types {
@@ -52,5 +56,3 @@ resource "aws_budgets_budget" "monthly_budget" {
     use_blended          = false
   }
 }
-
-# Cost category removed - RESOURCE_ID dimension not supported by AWS
