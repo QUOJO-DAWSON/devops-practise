@@ -1,48 +1,48 @@
-﻿name: Deploy Website (Pinned Project)
+﻿name: Deploy to AWS
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
     paths:
       - 'aws-free-tier/website/**'
-  workflow_dispatch:
+      - '.github/workflows/manual-deploy.yml'
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-2
 
-      # Upload all static assets except index.html with long cache
-      - name: Sync static assets to S3
+      - name: Deploy to S3
         run: |
-          aws s3 sync aws-free-tier/website \
-            s3://montero-devops-portfolio-271758791081 \
-            --delete \
-            --exclude "index.html" \
-            --cache-control "max-age=31536000"
+          echo " Deploying website to S3..."
+          aws s3 cp aws-free-tier/website/index.html s3://montero-devops-portfolio-271758791081/ --cache-control "max-age=300"
+          echo " S3 upload complete"
 
-      # Upload index.html separately with short cache
-      - name: Upload index.html separately (short cache)
-        run: |
-          aws s3 cp aws-free-tier/website/index.html \
-            s3://montero-devops-portfolio-271758791081/index.html \
-            --cache-control "max-age=60" \
-            --content-type "text/html; charset=utf-8"
-
-      # Invalidate CloudFront cache
       - name: Invalidate CloudFront cache
         run: |
+          echo " Invalidating CloudFront cache..."
           aws cloudfront create-invalidation \
             --distribution-id E16FSV0SJ20B4I \
             --paths "/*"
+          echo " CloudFront cache invalidated"
+
+      - name: Deployment complete
+        run: |
+          echo "================================"
+          echo " DEPLOYMENT SUCCESSFUL!"
+          echo "================================"
+          echo " Live site: https://dscmojg0sp0j1.cloudfront.net"
+          echo " CloudFront: Distribution E16FSV0SJ20B4I"
+          echo " S3 Bucket: montero-devops-portfolio-271758791081"
+          echo "  Cache invalidation in progress (2-3 minutes)"
+          echo "================================"
