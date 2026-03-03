@@ -23,13 +23,16 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-2
 
+      # Upload all static assets except index.html with long cache
       - name: Sync static assets to S3
         run: |
-          aws s3 sync aws-free-tier/website s3://montero-devops-portfolio-271758791081 \
+          aws s3 sync aws-free-tier/website \
+            s3://montero-devops-portfolio-271758791081 \
             --delete \
             --exclude "index.html" \
             --cache-control "max-age=31536000"
 
+      # Upload index.html separately with short cache
       - name: Upload index.html separately (short cache)
         run: |
           aws s3 cp aws-free-tier/website/index.html \
@@ -37,8 +40,9 @@ jobs:
             --cache-control "max-age=60" \
             --content-type "text/html; charset=utf-8"
 
+      # Invalidate CloudFront cache
       - name: Invalidate CloudFront cache
         run: |
           aws cloudfront create-invalidation \
-            --distribution-id E16FSVOSJ20B4I \
+            --distribution-id E16FSV0SJ20B4I \
             --paths "/*"
