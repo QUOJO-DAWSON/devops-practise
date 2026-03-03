@@ -20,8 +20,8 @@ jobs:
 
       - name: Sync website to S3
         run: |
-          aws s3 sync website s3://montero-devops-portfolio-271758791081 --delete --cache-control "max-age=31536000"
-          aws s3 cp website/index.html s3://montero-devops-portfolio-271758791081/index.html --cache-control "max-age=60" --content-type "text/html; charset=utf-8"
+          aws s3 sync aws-free-tier/website s3://montero-devops-portfolio-271758791081 --delete --cache-control "max-age=31536000"
+          aws s3 cp aws-free-tier/website/index.html s3://montero-devops-portfolio-271758791081/index.html --cache-control "max-age=60" --content-type "text/html; charset=utf-8"
 
       - name: Invalidate CloudFront cache
         run: |
