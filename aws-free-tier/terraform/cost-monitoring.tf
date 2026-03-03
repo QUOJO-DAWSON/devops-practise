@@ -1,4 +1,4 @@
-﻿# Cost Monitoring and Budgets
+# Cost Monitoring and Budgets
 
 # SNS Topic for Budget Alerts
 resource "aws_sns_topic" "budget_alerts" {
@@ -20,28 +20,29 @@ resource "aws_budgets_budget" "monthly_budget" {
   limit_unit        = "USD"
   time_unit         = "MONTHLY"
   time_period_start = "2026-02-01_00:00"
+  time_period_end   = "2087-06-15_00:00"
 
   notification {
     comparison_operator        = "GREATER_THAN"
     threshold                  = 80
-    threshold_type            = "PERCENTAGE"
-    notification_type         = "ACTUAL"
+    threshold_type             = "PERCENTAGE"
+    notification_type          = "ACTUAL"
     subscriber_email_addresses = ["dawsonkessongp@gmail.com"]
   }
 
   notification {
     comparison_operator        = "GREATER_THAN"
     threshold                  = 100
-    threshold_type            = "PERCENTAGE"
-    notification_type         = "ACTUAL"
+    threshold_type             = "PERCENTAGE"
+    notification_type          = "ACTUAL"
     subscriber_email_addresses = ["dawsonkessongp@gmail.com"]
   }
 
   notification {
     comparison_operator        = "GREATER_THAN"
     threshold                  = 100
-    threshold_type            = "PERCENTAGE"
-    notification_type         = "FORECASTED"
+    threshold_type             = "PERCENTAGE"
+    notification_type          = "FORECASTED"
     subscriber_email_addresses = ["dawsonkessongp@gmail.com"]
   }
 
@@ -52,19 +53,4 @@ resource "aws_budgets_budget" "monthly_budget" {
   }
 }
 
-# Cost Allocation Tags
-resource "aws_ce_cost_category" "project_category" {
-  name         = "${var.project_name}-category"
-  rule_version = "CostCategoryExpression.v1"
-
-  rule {
-    value = "DevOps-Portfolio"
-    rule {
-      dimension {
-        key           = "RESOURCE_ID"
-        match_options = ["CONTAINS"]
-        values        = ["montero"]
-      }
-    }
-  }
-}
+# Cost category removed - RESOURCE_ID dimension not supported by AWS

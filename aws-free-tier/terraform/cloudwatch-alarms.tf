@@ -1,4 +1,4 @@
-﻿# Enhanced CloudWatch Alarms
+# Enhanced CloudWatch Alarms
 
 resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
   alarm_name          = "${var.project_name}-lambda-errors"
@@ -10,7 +10,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
   statistic           = "Sum"
   threshold           = "5"
   alarm_description   = "Alert when Lambda function errors exceed threshold"
-  
+
   dimensions = {
     FunctionName = aws_lambda_function.visitor_counter.function_name
   }
@@ -46,7 +46,7 @@ resource "aws_cloudwatch_metric_alarm" "lambda_throttles" {
   statistic           = "Sum"
   threshold           = "10"
   alarm_description   = "Alert when Lambda function is throttled"
-  
+
   dimensions = {
     FunctionName = aws_lambda_function.visitor_counter.function_name
   }

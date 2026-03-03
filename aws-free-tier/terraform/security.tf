@@ -1,4 +1,4 @@
-﻿# Security Enhancements
+# Security Enhancements
 
 # S3 Bucket Encryption
 resource "aws_s3_bucket_server_side_encryption_configuration" "portfolio_website" {
@@ -15,7 +15,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "portfolio_website
 # S3 Bucket Versioning
 resource "aws_s3_bucket_versioning" "portfolio_website" {
   bucket = aws_s3_bucket.portfolio_website.id
-  
+
   versioning_configuration {
     status = "Enabled"
   }
@@ -40,7 +40,8 @@ resource "aws_s3_bucket_public_access_block" "portfolio_website" {
   bucket = aws_s3_bucket.portfolio_website.id
 
   block_public_acls       = true
-  block_public_policy     = true
+  block_public_policy     = true # Allow CloudFront OAI policy
   ignore_public_acls      = true
   restrict_public_buckets = true
 }
+

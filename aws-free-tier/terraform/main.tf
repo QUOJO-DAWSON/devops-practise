@@ -57,14 +57,7 @@ resource "aws_s3_bucket" "portfolio_website" {
   }
 }
 
-resource "aws_s3_bucket_public_access_block" "portfolio_website" {
-  bucket = aws_s3_bucket.portfolio_website.id
 
-  block_public_acls       = false
-  block_public_policy     = false
-  ignore_public_acls      = false
-  restrict_public_buckets = false
-}
 
 resource "aws_s3_bucket_website_configuration" "portfolio_website" {
   bucket = aws_s3_bucket.portfolio_website.id
@@ -115,6 +108,10 @@ resource "aws_cloudfront_distribution" "portfolio_cdn" {
   origin {
     domain_name = aws_s3_bucket.portfolio_website.bucket_regional_domain_name
     origin_id   = "S3-Portfolio"
+
+    s3_origin_config {
+      origin_access_identity = aws_cloudfront_origin_access_identity.portfolio.cloudfront_access_identity_path
+    }
   }
 
   default_cache_behavior {
