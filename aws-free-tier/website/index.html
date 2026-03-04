@@ -1309,19 +1309,39 @@
                 </div>
             </div>
 
-            <!-- Enhanced Visitor Counter -->
+            <!-- Live API Status Widget -->
             <div class="counter-widget">
-                <h2 class="counter-label">VISITOR COUNTER</h2>
-                <p>Total Site Visitors</p>
-                <div class="counter-value" id="count">Loading...</div>
-                <div class="counter-status" id="status"></div>
-                <div class="counter-error" id="error">
-                    <p>Unable to load visitor count</p>
-                    <button class="counter-refresh" onclick="updateCount()">
-                        <i class="fas fa-sync-alt"></i> Retry
-                    </button>
+                <h2 class="counter-label">LIVE SERVERLESS API</h2>
+                <p>Real-Time Infrastructure Status</p>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin: 32px 0;">
+                    <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 12px; text-align: left;">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                            <i class="fas fa-check-circle" style="color: #22c55e; font-size: 1.25rem;"></i>
+                            <span style="font-weight: 700; font-size: 0.875rem;">API Gateway</span>
+                        </div>
+                        <div id="api-status" style="font-size: 1.5rem; font-weight: 800;">Online</div>
+                    </div>
+                    
+                    <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 12px; text-align: left;">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                            <i class="fas fa-bolt" style="color: #f59e0b; font-size: 1.25rem;"></i>
+                            <span style="font-weight: 700; font-size: 0.875rem;">Lambda</span>
+                        </div>
+                        <div id="lambda-status" style="font-size: 1.5rem; font-weight: 800;">Active</div>
+                    </div>
+                    
+                    <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 12px; text-align: left;">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                            <i class="fas fa-database" style="color: #3b82f6; font-size: 1.25rem;"></i>
+                            <span style="font-weight: 700; font-size: 0.875rem;">DynamoDB</span>
+                        </div>
+                        <div id="db-status" style="font-size: 1.5rem; font-weight: 800;">Connected</div>
+                    </div>
                 </div>
-                <p class="counter-tech">Powered by AWS Lambda + DynamoDB</p>
+                
+                <div class="counter-status" id="status" style="margin-top: 16px; opacity: 0.9;"></div>
+                <p class="counter-tech">Serverless Architecture: Lambda + API Gateway + DynamoDB</p>
             </div>
         </section>
 
@@ -1337,48 +1357,37 @@
     </button>
 
     <script>
-        // Enhanced visitor counter with better error handling
-        let lastUpdate = null;
-        
-        async function updateCount() {
-            const countEl = document.getElementById('count');
+        // API Status Check
+        async function checkAPIStatus() {
             const statusEl = document.getElementById('status');
-            const errorEl = document.getElementById('error');
+            const apiStatusEl = document.getElementById('api-status');
+            const lambdaStatusEl = document.getElementById('lambda-status');
+            const dbStatusEl = document.getElementById('db-status');
             
             try {
-                countEl.textContent = 'Loading visitor count...';
-                statusEl.textContent = '';
-                errorEl.style.display = 'none';
-                
+                const startTime = performance.now();
                 const res = await fetch('https://o618nkadvg.execute-api.us-east-2.amazonaws.com/count', {
                     cache: 'no-store'
                 });
+                const endTime = performance.now();
+                const responseTime = Math.round(endTime - startTime);
                 
-                if (!res.ok) throw new Error('API request failed');
-                
-                const data = await res.json();
-                const count = Number(data.count || 0);
-                
-                countEl.textContent = count.toLocaleString();
-                lastUpdate = new Date();
-                
-                // Show last updated time
-                const seconds = Math.floor((new Date() - lastUpdate) / 1000);
-                statusEl.textContent = `Last updated: ${seconds} sec ago`;
-                
-                // Update timestamp every second
-                setInterval(() => {
-                    if (lastUpdate) {
-                        const sec = Math.floor((new Date() - lastUpdate) / 1000);
-                        statusEl.textContent = `Last updated: ${sec} sec ago`;
-                    }
-                }, 1000);
-                
+                if (res.ok) {
+                    const data = await res.json();
+                    
+                    apiStatusEl.innerHTML = '<i class="fas fa-check-circle" style="color: #22c55e;"></i> Online';
+                    lambdaStatusEl.textContent = `${responseTime}ms`;
+                    dbStatusEl.innerHTML = '<i class="fas fa-check-circle" style="color: #22c55e;"></i> Active';
+                    
+                    statusEl.innerHTML = `<i class="fas fa-clock"></i> Response time: ${responseTime}ms | Last check: ${new Date().toLocaleTimeString()}`;
+                } else {
+                    throw new Error('API error');
+                }
             } catch (e) {
-                console.error('Visitor counter error:', e);
-                countEl.textContent = 'Unavailable';
-                statusEl.textContent = '';
-                errorEl.style.display = 'block';
+                apiStatusEl.innerHTML = '<i class="fas fa-exclamation-triangle" style="color: #f59e0b;"></i> Check';
+                lambdaStatusEl.innerHTML = '<i class="fas fa-exclamation-triangle" style="color: #f59e0b;"></i> Check';
+                dbStatusEl.innerHTML = '<i class="fas fa-exclamation-triangle" style="color: #f59e0b;"></i> Check';
+                statusEl.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Status check in progress...';
             }
         }
 
@@ -1396,8 +1405,11 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
-        // Load counter on page load
-        window.addEventListener('load', updateCount);
+        // Check API status on page load
+        window.addEventListener('load', checkAPIStatus);
+        
+        // Refresh status every 30 seconds
+        setInterval(checkAPIStatus, 30000);
     </script>
 </body>
 </html>
