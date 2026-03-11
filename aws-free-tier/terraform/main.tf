@@ -79,6 +79,12 @@ resource "aws_cloudfront_distribution" "portfolio_cdn" {
   default_root_object = "index.html"
   price_class         = "PriceClass_100"
 
+  # Custom domain aliases
+  aliases = [
+    "gdawsonkesson.com",
+    "www.gdawsonkesson.com"
+  ]
+
   origin {
     domain_name              = aws_s3_bucket.portfolio_website.bucket_regional_domain_name
     origin_id                = "S3-Portfolio"
@@ -129,8 +135,11 @@ resource "aws_cloudfront_distribution" "portfolio_cdn" {
     }
   }
 
+  # Use custom SSL certificate
   viewer_certificate {
-    cloudfront_default_certificate = true
+    acm_certificate_arn      = aws_acm_certificate_validation.portfolio.certificate_arn
+    ssl_support_method       = "sni-only"
+    minimum_protocol_version = "TLSv1.2_2021"
   }
 
   tags = {
